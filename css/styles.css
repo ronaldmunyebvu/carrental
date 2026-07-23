@@ -243,11 +243,13 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   }
   .nav-actions #nav-auth,
   .nav-actions #nav-user {
-    display: none;
+    display: flex !important;
+    gap: 8px;
   }
-  .nav-links.show ~ .nav-actions #nav-auth,
-  .nav-links.show ~ .nav-actions #nav-user {
-    display: none;
+  .nav-actions #nav-auth .btn,
+  .nav-actions #nav-user .btn {
+    font-size: 0.75rem;
+    padding: 6px 10px;
   }
 }
 
