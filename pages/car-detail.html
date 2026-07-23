@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Details - DriveShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+        DriveShare
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="search.html">Browse Cars</a>
+        <a href="list-car.html">List Your Car</a>
+      </div>
+      <div class="nav-actions">
+        <div id="nav-auth">
+          <a href="login.html" class="btn btn-ghost">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+        <div id="nav-user" class="hidden">
+          <a href="dashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+          <div class="nav-avatar" onclick="toggleDropdown()">SJ</div>
+          <div id="user-dropdown" class="nav-dropdown hidden">
+            <a href="profile.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              My Profile
+            </a>
+            <a href="dashboard.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Dashboard
+            </a>
+            <a href="list-car.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              List a Car
+            </a>
+            <hr>
+            <button onclick="logout()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </button>
+          </div>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="search.html">Search</a>
+        <span>/</span>
+        <span id="breadcrumb-car">Car Details</span>
+      </div>
+      <h1 id="page-title">Car Details</h1>
+    </div>
+  </section>
+
+  <!-- Detail Layout -->
+  <div class="container">
+    <div class="detail-layout">
+
+      <!-- LEFT COLUMN -->
+      <div class="detail-main">
+
+        <!-- Gallery -->
+        <div class="gallery">
+          <div class="gallery-main">
+            <div class="placeholder-img" id="gallery-main-img">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="gallery-thumbs" id="gallery-thumbs">
+            <div class="gallery-thumb active" data-index="0">
+              <div class="placeholder-img">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="gallery-thumb" data-index="1">
+              <div class="placeholder-img">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="gallery-thumb" data-index="2">
+              <div class="placeholder-img">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="gallery-thumb" data-index="3">
+              <div class="placeholder-img">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Info -->
+        <div class="detail-info">
+          <div class="detail-title-row">
+            <div>
+              <h1 class="detail-title" id="car-title"></h1>
+              <div class="car-card-rating mt-1" id="car-rating"></div>
+            </div>
+            <div class="detail-price" id="car-price"></div>
+          </div>
+        </div>
+
+        <!-- Specs Grid -->
+        <div class="detail-specs" id="car-specs">
+          <div class="spec-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            <div class="spec-value" id="spec-transmission"></div>
+            <div class="spec-label">Transmission</div>
+          </div>
+          <div class="spec-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17"/><path d="M15 10h2a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2v0a2 2 0 0 0 2-2V9l-3-3"/><path d="M3 22h12"/></svg>
+            <div class="spec-value" id="spec-fuel"></div>
+            <div class="spec-label">Fuel Type</div>
+          </div>
+          <div class="spec-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="spec-value" id="spec-seats"></div>
+            <div class="spec-label">Seats</div>
+          </div>
+          <div class="spec-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <div class="spec-value" id="spec-mileage"></div>
+            <div class="spec-label">Mileage</div>
+          </div>
+        </div>
+
+        <!-- About This Car -->
+        <div class="detail-section">
+          <h3>About this car</h3>
+          <p id="car-description"></p>
+        </div>
+
+        <!-- Features -->
+        <div class="detail-section">
+          <h3>Features</h3>
+          <div class="flex gap-1 mt-2" id="car-features" style="flex-wrap: wrap;"></div>
+        </div>
+
+        <!-- Owner Card -->
+        <div class="detail-section">
+          <h3>Your host</h3>
+          <div class="owner-card" id="owner-card">
+            <div class="owner-avatar-lg" id="owner-avatar"></div>
+            <div class="owner-info">
+              <h4 id="owner-name"></h4>
+              <p id="owner-details"></p>
+              <p id="owner-member"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="detail-section">
+          <h3>Reviews</h3>
+          <div class="reviews-summary" id="reviews-summary">
+            <div class="reviews-avg" id="reviews-avg"></div>
+            <div>
+              <div id="reviews-stars" style="color: var(--accent); font-size: 1.125rem;"></div>
+              <div class="reviews-count-text" id="reviews-count-text"></div>
+            </div>
+          </div>
+          <div id="reviews-list"></div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Booking Card -->
+      <div>
+        <div class="booking-card">
+          <div class="booking-price-display">
+            <span class="price" id="booking-price"></span>
+            <span class="per-day">/ day</span>
+          </div>
+          <div class="booking-date-fields">
+            <div class="field">
+              <label>Pick-up</label>
+              <input type="date" id="pickup-date">
+            </div>
+            <div class="field">
+              <label>Drop-off</label>
+              <input type="date" id="dropoff-date">
+            </div>
+          </div>
+          <hr class="booking-divider">
+          <div class="booking-breakdown" id="booking-breakdown">
+            <div class="row">
+              <span id="breakdown-label">$0 x 0 days</span>
+              <span id="breakdown-subtotal">$0</span>
+            </div>
+            <div class="row">
+              <span>Insurance fee</span>
+              <span id="breakdown-insurance">$0</span>
+            </div>
+            <div class="row total">
+              <span>Total</span>
+              <span id="breakdown-total">$0</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" id="book-btn" onclick="requestToBook()">Request to Book</button>
+          <p class="text-muted mt-2" style="font-size: 0.8125rem; text-align: center;" id="response-time"></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo" style="color: var(--primary);">
+            <svg viewBox="0 0 32 32" fill="currentColor" width="28" height="28"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+            DriveShare
+          </a>
+          <p>The trusted peer-to-peer car rental marketplace. Rent unique cars or earn money sharing yours.</p>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Safety</a></li>
+            <li><a href="#">Insurance</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Licenses</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 DriveShare. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top -->
+  <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18,15 12,9 6,15"/></svg>
+  </button>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    (async function () {
+      await checkAuth();
+      var params = new URLSearchParams(window.location.search);
+      var carId = params.get('id');
+      if (!carId) { window.location.href = 'search.html'; return; }
+
+      var car = await fetchCar(carId);
+      if (!car) {
+        document.getElementById('page-title').textContent = 'Car Not Found';
+        document.getElementById('breadcrumb-car').textContent = 'Not Found';
+        document.querySelector('.detail-main').innerHTML = '<div style="text-align:center;padding:80px 24px;"><h2>Car not found</h2><p class="text-muted mt-2">The car you are looking for does not exist or has been removed.</p><a href="search.html" class="btn btn-primary mt-3">Browse Cars</a></div>';
+        document.querySelector('.booking-card').parentElement.style.display = 'none';
+        return;
+      }
+
+      var carTitle = car.year + ' ' + car.make + ' ' + car.model;
+      document.title = carTitle + ' - DriveShare';
+      document.getElementById('page-title').textContent = carTitle;
+      document.getElementById('breadcrumb-car').textContent = carTitle;
+      document.getElementById('car-title').textContent = carTitle;
+      document.getElementById('car-price').innerHTML = '$' + car.dailyPrice + '<span>/day</span>';
+      document.getElementById('car-rating').innerHTML =
+        '<span class="stars">' + getStars(car.rating) + '</span>' +
+        '<span>' + car.rating + '</span>' +
+        '<span>(' + car.reviewCount + ' reviews)</span>';
+      document.getElementById('spec-transmission').textContent = car.transmission;
+      document.getElementById('spec-fuel').textContent = car.fuel;
+      document.getElementById('spec-seats').textContent = car.seats;
+      document.getElementById('spec-mileage').textContent = car.mileage;
+      document.getElementById('car-description').textContent = car.description;
+
+      var featuresHtml = '';
+      if (car.features) {
+        car.features.forEach(function (f) {
+          featuresHtml += '<span class="tag tag-primary">' + f + '</span>';
+        });
+      }
+      document.getElementById('car-features').innerHTML = featuresHtml;
+
+      // Gallery - load uploaded images
+      var images = car.imagePaths && car.imagePaths.length > 0 ? car.imagePaths : [];
+      var galleryMain = document.querySelector('.gallery-main');
+      var thumbsContainer = document.getElementById('gallery-thumbs');
+
+      if (images.length > 0) {
+        galleryMain.innerHTML = '<img src="' + images[0] + '" id="gallery-main-img" style="width:100%;height:100%;object-fit:cover;border-radius:12px;cursor:zoom-in;">';
+        var thumbsHtml = '';
+        images.forEach(function (src, i) {
+          thumbsHtml += '<div class="gallery-thumb' + (i === 0 ? ' active' : '') + '" data-index="' + i + '"><img src="' + src + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>';
+        });
+        thumbsContainer.innerHTML = thumbsHtml;
+
+        var thumbsNew = thumbsContainer.querySelectorAll('.gallery-thumb');
+        thumbsNew.forEach(function (thumb) {
+          thumb.addEventListener('click', function () {
+            thumbsNew.forEach(function (t) { t.classList.remove('active'); });
+            thumb.classList.add('active');
+            var idx = parseInt(thumb.getAttribute('data-index'));
+            document.getElementById('gallery-main-img').src = images[idx];
+          });
+        });
+      }
+
+      // Owner card
+      document.getElementById('owner-avatar').textContent = car.hostAvatar || 'U';
+      document.getElementById('owner-name').textContent = car.hostName || 'Owner';
+      document.getElementById('owner-details').textContent = 'Rating: ' + (car.rating || 'New') + ' · ' + (car.trips || 0) + ' trips completed';
+      document.getElementById('owner-member').textContent = '';
+
+      document.getElementById('booking-price').textContent = '$' + car.dailyPrice;
+
+      // Hide booking card if the logged-in user is the car owner
+      if (APP.currentUser && car.ownerId && APP.currentUser.id === car.ownerId) {
+        document.querySelector('.booking-card').innerHTML =
+          '<div style="text-align:center;padding:32px 16px;">' +
+          '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="1.5" style="margin-bottom:16px;"><path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14"/></svg>' +
+          '<h3 style="margin:0 0 8px;color:var(--gray-700);">This is your car</h3>' +
+          '<p style="color:var(--gray-500);font-size:0.875rem;margin:0;">You cannot book a car you listed.</p>' +
+          '</div>';
+      }
+
+      var today = new Date();
+      var tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+      var nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 4);
+      var pickupInput = document.getElementById('pickup-date');
+      var dropoffInput = document.getElementById('dropoff-date');
+      pickupInput.min = today.toISOString().split('T')[0];
+      dropoffInput.min = today.toISOString().split('T')[0];
+      pickupInput.value = tomorrow.toISOString().split('T')[0];
+      dropoffInput.value = nextWeek.toISOString().split('T')[0];
+
+      document.getElementById('response-time').textContent = (car.hostName || 'Owner') + ' usually responds within 1 hour';
+
+      pickupInput.addEventListener('change', updatePricing);
+      dropoffInput.addEventListener('change', updatePricing);
+
+      function updatePricing() {
+        var result = calculateTotal(car.dailyPrice, pickupInput.value, dropoffInput.value);
+        document.getElementById('breakdown-label').textContent = '$' + car.dailyPrice + ' x ' + result.days + ' days';
+        document.getElementById('breakdown-subtotal').textContent = '$' + result.subtotal;
+        document.getElementById('breakdown-insurance').textContent = '$' + result.insurance;
+        document.getElementById('breakdown-total').textContent = '$' + result.total;
+      }
+      updatePricing();
+
+      window.requestToBook = async function () {
+        if (!APP.currentUser) {
+          window.location.href = 'login.html?returnTo=' + encodeURIComponent('car-detail.html?id=' + carId);
+          return;
+        }
+
+        var pickupVal = pickupInput.value;
+        var dropoffVal = dropoffInput.value;
+        if (!pickupVal || !dropoffVal) {
+          showToast('Please select pick-up and drop-off dates', 'error');
+          return;
+        }
+
+        var booking = calculateTotal(car.dailyPrice, pickupVal, dropoffVal);
+        if (booking.days < 1) {
+          showToast('Drop-off date must be after pick-up date', 'error');
+          return;
+        }
+
+        var result = await createBooking({
+          carId: car.id,
+          startDate: pickupVal,
+          endDate: dropoffVal,
+          total: booking.total
+        });
+
+        if (result.success) {
+          localStorage.setItem('driveshare_last_booking', JSON.stringify({
+            carName: carTitle,
+            pickupDate: pickupVal,
+            dropoffDate: dropoffVal,
+            totalAmount: booking.total,
+            bookingId: result.booking.id
+          }));
+          window.location.href = 'booking-confirmation.html?id=' + car.id;
+        } else {
+          showToast(result.error || 'Booking failed. Please try again.', 'error');
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

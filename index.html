@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DriveShare - Peer-to-Peer Car Rental</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+        DriveShare
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="pages/search.html">Browse Cars</a>
+        <a href="pages/list-car.html">List Your Car</a>
+      </div>
+      <div class="nav-actions">
+        <div id="nav-auth">
+          <a href="pages/login.html" class="btn btn-ghost">Log In</a>
+          <a href="pages/signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+        <div id="nav-user" class="hidden">
+          <a href="pages/dashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+          <div class="nav-avatar" onclick="toggleDropdown()">SJ</div>
+          <div id="user-dropdown" class="nav-dropdown hidden">
+            <a href="pages/profile.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              My Profile
+            </a>
+            <a href="pages/dashboard.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Dashboard
+            </a>
+            <a href="pages/list-car.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              List a Car
+            </a>
+            <hr>
+            <button onclick="logout()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </button>
+          </div>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>Find the perfect car for any occasion</h1>
+      <p>Discover unique cars from local owners. Rent a car or list yours to earn money.</p>
+      <div class="search-box">
+        <div class="search-field" style="flex:2">
+          <label>Location</label>
+          <input type="text" id="search-location" placeholder="City, airport, or address">
+        </div>
+        <div class="search-field">
+          <label>Pick-up Date</label>
+          <input type="date" id="search-pickup">
+        </div>
+        <div class="search-field">
+          <label>Drop-off Date</label>
+          <input type="date" id="search-dropoff">
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="performSearch()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-number">50,000+</div>
+          <div class="stat-label">Cars Available</div>
+        </div>
+        <div>
+          <div class="stat-number">2M+</div>
+          <div class="stat-label">Trips Completed</div>
+        </div>
+        <div>
+          <div class="stat-number">10,000+</div>
+          <div class="stat-label">5-Star Reviews</div>
+        </div>
+        <div>
+          <div class="stat-number">350+</div>
+          <div class="stat-label">Cities Covered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Cars -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Trending Cars Near You</h2>
+        <p>Handpicked vehicles that our community loves. Book instantly or send a request.</p>
+      </div>
+      <div class="cars-grid" id="featured-cars"></div>
+      <div class="text-center mt-4">
+        <a href="pages/search.html" class="btn btn-secondary">View All Cars</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" style="background:var(--white)">
+    <div class="container">
+      <div class="section-header">
+        <h2>How DriveShare Works</h2>
+        <p>Getting started is simple. Rent a car in minutes or start earning today.</p>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-step">Step 1</div>
+          <div class="how-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3>Search & Find</h3>
+          <p>Browse thousands of cars filtered by location, type, price, and availability. Find the perfect match.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-step">Step 2</div>
+          <div class="how-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <h3>Book & Pay</h3>
+          <p>Select your dates, review the total cost, and confirm your booking. Secure payment handled by us.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-step">Step 3</div>
+          <div class="how-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14"/></svg>
+          </div>
+          <h3>Drive & Enjoy</h3>
+          <p>Pick up the car, hit the road, and return it when done. It is that easy!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Categories -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Explore by Category</h2>
+        <p>Find exactly what you need from our curated selection of vehicle types.</p>
+      </div>
+      <div class="cars-grid">
+        <a href="pages/search.html?category=sedan" class="car-card" style="text-align:center;padding:40px 24px;">
+          <div class="how-icon" style="margin-bottom:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/></svg>
+          </div>
+          <h3>Sedans</h3>
+          <p class="text-muted mt-1" style="font-size:0.875rem">Comfortable and fuel-efficient for daily drives</p>
+        </a>
+        <a href="pages/search.html?category=suv" class="car-card" style="text-align:center;padding:40px 24px;">
+          <div class="how-icon" style="margin-bottom:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 17H3v-6l2-5h9l4 5h4v6h-2M5 17h14M9 17v2M15 17v2M7 12h10"/></svg>
+          </div>
+          <h3>SUVs</h3>
+          <p class="text-muted mt-1" style="font-size:0.875rem">Spacious vehicles for families and adventures</p>
+        </a>
+        <a href="pages/search.html?category=luxury" class="car-card" style="text-align:center;padding:40px 24px;">
+          <div class="how-icon" style="margin-bottom:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3>Luxury</h3>
+          <p class="text-muted mt-1" style="font-size:0.875rem">Premium vehicles for special occasions</p>
+        </a>
+        <a href="pages/search.html?category=sports" class="car-card" style="text-align:center;padding:40px 24px;">
+          <div class="how-icon" style="margin-bottom:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+          </div>
+          <h3>Sports</h3>
+          <p class="text-muted mt-1" style="font-size:0.875rem">High-performance machines for thrill seekers</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-section">
+        <h2>Own a car? Start earning today</h2>
+        <p>List your car on DriveShare and earn up to $1,000/month. We handle insurance and payments.</p>
+        <a href="pages/list-car.html" class="btn btn-lg">List Your Car</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" style="background:var(--white)">
+    <div class="container">
+      <div class="section-header">
+        <h2>What Our Users Say</h2>
+        <p>Thousands of happy renters and hosts trust DriveShare every day.</p>
+      </div>
+      <div class="how-grid">
+        <div class="how-card" style="text-align:left">
+          <div class="review-stars" style="font-size:1.125rem;margin-bottom:12px">★★★★★</div>
+          <p style="margin-bottom:16px;color:var(--gray-700);font-style:italic">"I saved so much money compared to traditional rental companies. The car was amazing and the host was incredibly helpful!"</p>
+          <div class="car-card-owner">
+            <div class="car-card-owner-avatar">MC</div>
+            <div><strong>Mike Chen</strong><br><span style="font-size:0.75rem">San Francisco, CA</span></div>
+          </div>
+        </div>
+        <div class="how-card" style="text-align:left">
+          <div class="review-stars" style="font-size:1.125rem;margin-bottom:12px">★★★★★</div>
+          <p style="margin-bottom:16px;color:var(--gray-700);font-style:italic">"Listed my car and made $800 last month with minimal effort. The insurance coverage and payment system make it completely worry-free."</p>
+          <div class="car-card-owner">
+            <div class="car-card-owner-avatar">SJ</div>
+            <div><strong>Sarah Johnson</strong><br><span style="font-size:0.75rem">Car Owner / Host</span></div>
+          </div>
+        </div>
+        <div class="how-card" style="text-align:left">
+          <div class="review-stars" style="font-size:1.125rem;margin-bottom:12px">★★★★★</div>
+          <p style="margin-bottom:16px;color:var(--gray-700);font-style:italic">"Used DriveShare for our family road trip. Found a spacious SUV in minutes and had an incredible experience from start to finish."</p>
+          <div class="car-card-owner">
+            <div class="car-card-owner-avatar">LP</div>
+            <div><strong>Lisa Park</strong><br><span style="font-size:0.75rem">Seattle, WA</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" style="color: var(--primary);">
+            <svg viewBox="0 0 32 32" fill="currentColor" width="28" height="28"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+            DriveShare
+          </a>
+          <p>The trusted peer-to-peer car rental marketplace. Rent unique cars or earn money sharing yours.</p>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Safety</a></li>
+            <li><a href="#">Insurance</a></li>
+            <li><a href="pages/contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Licenses</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 DriveShare. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top -->
+  <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18,15 12,9 6,15"/></svg>
+  </button>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Load featured cars from backend API
+    (async function () {
+      await checkAuth();
+      var cars = await fetchCars();
+      var featured = cars.slice(0, 6);
+      document.getElementById('featured-cars').innerHTML = featured.map(renderCarCard).join('');
+
+      // Set default dates
+      var today = new Date();
+      var tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+      var nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
+      document.getElementById('search-pickup').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('search-dropoff').value = nextWeek.toISOString().split('T')[0];
+    })();
+
+    function performSearch() {
+      var loc = document.getElementById('search-location').value;
+      var pickup = document.getElementById('search-pickup').value;
+      var dropoff = document.getElementById('search-dropoff').value;
+      let url = 'pages/search.html';
+      const params = [];
+      if (loc) params.push('location=' + encodeURIComponent(loc));
+      if (pickup) params.push('pickup=' + pickup);
+      if (dropoff) params.push('dropoff=' + dropoff);
+      if (params.length) url += '?' + params.join('&');
+      window.location.href = url;
+    }
+
+    // Enter key search
+    document.getElementById('search-location').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+  </script>
+</body>
+</html>

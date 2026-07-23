@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Your Car - DriveShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+        DriveShare
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="search.html">Browse Cars</a>
+        <a href="list-car.html" class="active">List Your Car</a>
+      </div>
+      <div class="nav-actions">
+        <div id="nav-auth">
+          <a href="login.html" class="btn btn-ghost">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+        <div id="nav-user" class="hidden">
+          <a href="dashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+          <div class="nav-avatar" onclick="toggleDropdown()">SJ</div>
+          <div id="user-dropdown" class="nav-dropdown hidden">
+            <a href="profile.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              My Profile
+            </a>
+            <a href="dashboard.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Dashboard
+            </a>
+            <a href="list-car.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              List a Car
+            </a>
+            <hr>
+            <button onclick="logout()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </button>
+          </div>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <span>List Your Car</span>
+      </div>
+      <h1>List Your Car</h1>
+      <p>Share your car and start earning with DriveShare</p>
+    </div>
+  </section>
+
+  <!-- Listing Form -->
+  <div class="container">
+    <div class="listing-form-layout">
+
+      <!-- Steps Sidebar -->
+      <aside class="form-steps">
+        <div class="form-step-item active" data-step="0">
+          <div class="form-step-num">1</div>
+          <span>Car Basics</span>
+        </div>
+        <div class="form-step-line"></div>
+        <div class="form-step-item" data-step="1">
+          <div class="form-step-num">2</div>
+          <span>Details</span>
+        </div>
+        <div class="form-step-line"></div>
+        <div class="form-step-item" data-step="2">
+          <div class="form-step-num">3</div>
+          <span>Location</span>
+        </div>
+        <div class="form-step-line"></div>
+        <div class="form-step-item" data-step="3">
+          <div class="form-step-num">4</div>
+          <span>Photos</span>
+        </div>
+        <div class="form-step-line"></div>
+        <div class="form-step-item" data-step="4">
+          <div class="form-step-num">5</div>
+          <span>Description</span>
+        </div>
+      </aside>
+
+      <!-- Form Content -->
+      <div class="form-content">
+        <form id="listing-form" novalidate>
+
+          <!-- Step 1: Car Basics -->
+          <div class="form-step-panel" data-step="0">
+            <h2>Car Basics</h2>
+            <p>Tell us about the car you want to list.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="car-make">Make *</label>
+                <input type="text" id="car-make" name="make" placeholder="e.g. Toyota" required>
+              </div>
+              <div class="form-group">
+                <label for="car-model">Model *</label>
+                <input type="text" id="car-model" name="model" placeholder="e.g. Camry" required>
+              </div>
+              <div class="form-group">
+                <label for="car-year">Year *</label>
+                <select id="car-year" name="year" required>
+                  <option value="">Select year</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="car-category">Category *</label>
+                <select id="car-category" name="category" required>
+                  <option value="">Select category</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Luxury">Luxury</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Wagon">Wagon</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <div></div>
+              <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Details -->
+          <div class="form-step-panel hidden" data-step="1">
+            <h2>Details</h2>
+            <p>Provide the specifications, pricing, and your contact number for your car.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="car-mileage">Mileage *</label>
+                <input type="text" id="car-mileage" name="mileage" placeholder="e.g. 32,000" required>
+              </div>
+              <div class="form-group">
+                <label for="car-transmission">Transmission *</label>
+                <select id="car-transmission" name="transmission" required>
+                  <option value="">Select transmission</option>
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual">Manual</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="car-fuel">Fuel Type *</label>
+                <select id="car-fuel" name="fuel" required>
+                  <option value="">Select fuel type</option>
+                  <option value="Petrol">Petrol</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Electric">Electric</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="car-seats">Seats *</label>
+                <input type="number" id="car-seats" name="seats" min="1" max="12" placeholder="e.g. 5" required>
+              </div>
+              <div class="form-group">
+                <label for="car-price">Daily Price ($) *</label>
+                <input type="text" id="car-price" name="dailyPrice" placeholder="e.g. 75" required>
+              </div>
+              <div class="form-group full">
+                <label for="car-phone">Phone Number (for WhatsApp) *</label>
+                <div style="display:flex;gap:8px;">
+                  <div class="phone-country-wrap" id="phone-country-wrap" style="position:relative;width:220px;flex-shrink:0;">
+                    <div class="phone-country-trigger" id="phone-country-trigger" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-300);border-radius:8px;cursor:pointer;background:#fff;height:44px;box-sizing:border-box;">
+                      <img id="selected-flag" src="https://flagcdn.com/w40/zw.png" style="width:22px;height:16px;object-fit:cover;border-radius:2px;">
+                      <span id="selected-code-text" style="font-size:0.875rem;white-space:nowrap;">+263 (ZW)</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;"><polyline points="6,9 12,15 18,9"/></svg>
+                    </div>
+                    <div class="phone-country-list" id="phone-country-list" style="display:none;position:absolute;top:48px;left:0;right:0;background:#fff;border:1px solid var(--gray-300);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:100;max-height:260px;overflow:hidden;">
+                      <div style="padding:8px;border-bottom:1px solid var(--gray-200);">
+                        <input type="text" id="country-search" placeholder="Search country..." style="width:100%;border:1px solid var(--gray-300);border-radius:6px;padding:6px 10px;font-size:0.8125rem;outline:none;box-sizing:border-box;">
+                      </div>
+                      <div style="overflow-y:auto;max-height:210px;" id="country-options-list">
+                      </div>
+                    </div>
+                    <input type="hidden" id="car-country-code" name="countryCode" value="+263">
+                  </div>
+                  <input type="tel" id="car-phone" name="phoneNumber" placeholder="e.g. 77 123 4567" required style="flex:1;">
+                </div>
+                <p style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;">Include your country code. This number will only be shared with renters after their booking is approved.</p>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+              <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Location -->
+          <div class="form-step-panel hidden" data-step="2">
+            <h2>Location</h2>
+            <p>Where is your car located for pickup?</p>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label for="car-address">Address / Location *</label>
+                <input type="text" id="car-address" name="address" placeholder="e.g. 123 Main Street" required>
+              </div>
+              <div class="form-group">
+                <label for="car-city">City *</label>
+                <input type="text" id="car-city" name="city" placeholder="e.g. Los Angeles" required>
+              </div>
+              <div class="form-group">
+                <label for="car-state">State *</label>
+                <select id="car-state" name="state" required>
+                  <option value="">Select state</option>
+                  <option value="CA">California</option>
+                  <option value="WA">Washington</option>
+                  <option value="OR">Oregon</option>
+                  <option value="ZW">Zimbabwe</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="car-zip">Zip Code *</label>
+                <input type="text" id="car-zip" name="zip" placeholder="e.g. 90001" required>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+              <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Photos -->
+          <div class="form-step-panel hidden" data-step="3">
+            <h2>Photos</h2>
+            <p>Add exactly 3 photos to your listing. These will be shown to renters.</p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;">
+              <div id="upload-slot-0" class="photo-slot" style="border:2px dashed var(--gray-300);border-radius:12px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:var(--gray-50);transition:border-color 0.2s;">
+                <input type="file" accept="image/jpeg,image/png,image/webp" class="car-photo-input" data-slot="0" style="display:none;">
+                <div class="slot-placeholder" style="text-align:center;color:var(--gray-500);">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                  <p style="font-size:0.8rem;margin-top:4px;">Photo 1 *</p>
+                </div>
+                <img class="slot-preview" style="display:none;width:100%;height:100%;object-fit:cover;">
+                <button type="button" class="slot-remove" style="display:none;position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:24px;text-align:center;">&times;</button>
+              </div>
+              <div id="upload-slot-1" class="photo-slot" style="border:2px dashed var(--gray-300);border-radius:12px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:var(--gray-50);transition:border-color 0.2s;">
+                <input type="file" accept="image/jpeg,image/png,image/webp" class="car-photo-input" data-slot="1" style="display:none;">
+                <div class="slot-placeholder" style="text-align:center;color:var(--gray-500);">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                  <p style="font-size:0.8rem;margin-top:4px;">Photo 2 *</p>
+                </div>
+                <img class="slot-preview" style="display:none;width:100%;height:100%;object-fit:cover;">
+                <button type="button" class="slot-remove" style="display:none;position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:24px;text-align:center;">&times;</button>
+              </div>
+              <div id="upload-slot-2" class="photo-slot" style="border:2px dashed var(--gray-300);border-radius:12px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:var(--gray-50);transition:border-color 0.2s;">
+                <input type="file" accept="image/jpeg,image/png,image/webp" class="car-photo-input" data-slot="2" style="display:none;">
+                <div class="slot-placeholder" style="text-align:center;color:var(--gray-500);">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                  <p style="font-size:0.8rem;margin-top:4px;">Photo 3 *</p>
+                </div>
+                <img class="slot-preview" style="display:none;width:100%;height:100%;object-fit:cover;">
+                <button type="button" class="slot-remove" style="display:none;position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:24px;text-align:center;">&times;</button>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:var(--gray-500);margin-top:4px;">JPG, PNG or WebP. Max 10MB each. All 3 photos are required.</p>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+              <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step</button>
+            </div>
+          </div>
+
+          <!-- Step 5: Description -->
+          <div class="form-step-panel hidden" data-step="4">
+            <h2>Description</h2>
+            <p>Write a description and highlight your car's best features.</p>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label for="car-title">Listing Title *</label>
+                <input type="text" id="car-title" name="title" placeholder="e.g. Comfortable Toyota Camry in Downtown LA" required>
+              </div>
+              <div class="form-group full">
+                <label for="car-description">Description *</label>
+                <textarea id="car-description" name="description" placeholder="Describe your car, its condition, any special features, house rules, etc." required></textarea>
+              </div>
+              <div class="form-group full">
+                <label>Features</label>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:8px;">
+                  <label class="filter-option"><input type="checkbox" name="features" value="Leather Seats"> Leather Seats</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="GPS"> GPS</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="Bluetooth"> Bluetooth</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="Sunroof"> Sunroof</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="Heated Seats"> Heated Seats</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="Backup Camera"> Backup Camera</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="USB Ports"> USB Ports</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="Apple CarPlay"> Apple CarPlay</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="All-Wheel Drive"> All-Wheel Drive</label>
+                  <label class="filter-option"><input type="checkbox" name="features" value="Premium Sound"> Premium Sound</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+              <button type="submit" class="btn btn-primary">Submit Listing</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo" style="color: var(--primary);">
+            <svg viewBox="0 0 32 32" fill="currentColor" width="28" height="28"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+            DriveShare
+          </a>
+          <p>The trusted peer-to-peer car rental marketplace. Rent unique cars or earn money sharing yours.</p>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Safety</a></li>
+            <li><a href="#">Insurance</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Licenses</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 DriveShare. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top -->
+  <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18,15 12,9 6,15"/></svg>
+  </button>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    (async function () {
+      await checkAuth();
+
+      if (!APP.currentUser) {
+        window.location.href = 'login.html?returnTo=' + encodeURIComponent('list-car.html');
+        return;
+      }
+
+      var currentStep = 0;
+      var totalSteps = 5;
+      var panels = document.querySelectorAll('.form-step-panel');
+      var stepItems = document.querySelectorAll('.form-step-item');
+      var photoFiles = [null, null, null];
+
+      var yearSelect = document.getElementById('car-year');
+      for (var y = 2025; y >= 2015; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+
+      // Country code dropdown with flags
+      var countries = [
+        {code:'+1',cc:'us',name:'United States',abbr:'US'},
+        {code:'+44',cc:'gb',name:'United Kingdom',abbr:'UK'},
+        {code:'+27',cc:'za',name:'South Africa',abbr:'SA'},
+        {code:'+234',cc:'ng',name:'Nigeria',abbr:'NG'},
+        {code:'+254',cc:'ke',name:'Kenya',abbr:'KE'},
+        {code:'+256',cc:'ug',name:'Uganda',abbr:'UG'},
+        {code:'+255',cc:'tz',name:'Tanzania',abbr:'TZ'},
+        {code:'+260',cc:'zm',name:'Zambia',abbr:'ZM'},
+        {code:'+263',cc:'zw',name:'Zimbabwe',abbr:'ZW'},
+        {code:'+91',cc:'in',name:'India',abbr:'IN'},
+        {code:'+86',cc:'cn',name:'China',abbr:'CN'},
+        {code:'+81',cc:'jp',name:'Japan',abbr:'JP'},
+        {code:'+49',cc:'de',name:'Germany',abbr:'DE'},
+        {code:'+33',cc:'fr',name:'France',abbr:'FR'},
+        {code:'+34',cc:'es',name:'Spain',abbr:'ES'},
+        {code:'+39',cc:'it',name:'Italy',abbr:'IT'},
+        {code:'+55',cc:'br',name:'Brazil',abbr:'BR'},
+        {code:'+52',cc:'mx',name:'Mexico',abbr:'MX'},
+        {code:'+61',cc:'au',name:'Australia',abbr:'AU'},
+        {code:'+64',cc:'nz',name:'New Zealand',abbr:'NZ'},
+        {code:'+971',cc:'ae',name:'United Arab Emirates',abbr:'UAE'},
+        {code:'+966',cc:'sa',name:'Saudi Arabia',abbr:'KSA'},
+        {code:'+20',cc:'eg',name:'Egypt',abbr:'EG'},
+        {code:'+212',cc:'ma',name:'Morocco',abbr:'MA'},
+        {code:'+216',cc:'tn',name:'Tunisia',abbr:'TN'},
+        {code:'+213',cc:'dz',name:'Algeria',abbr:'DZ'},
+        {code:'+221',cc:'sn',name:'Senegal',abbr:'SN'},
+        {code:'+225',cc:'ci',name:'Ivory Coast',abbr:'CI'},
+        {code:'+228',cc:'tg',name:'Togo',abbr:'TG'},
+        {code:'+229',cc:'bj',name:'Benin',abbr:'BJ'},
+        {code:'+233',cc:'gh',name:'Ghana',abbr:'GH'},
+        {code:'+237',cc:'cm',name:'Cameroon',abbr:'CM'},
+        {code:'+243',cc:'cd',name:'DR Congo',abbr:'CD'},
+        {code:'+250',cc:'rw',name:'Rwanda',abbr:'RW'},
+        {code:'+265',cc:'mw',name:'Malawi',abbr:'MW'},
+        {code:'+267',cc:'bw',name:'Botswana',abbr:'BW'},
+        {code:'+268',cc:'sz',name:'Eswatini',abbr:'SZ'},
+        {code:'+264',cc:'na',name:'Namibia',abbr:'NA'},
+        {code:'+262',cc:'re',name:'Reunion',abbr:'RE'},
+        {code:'+63',cc:'ph',name:'Philippines',abbr:'PH'},
+        {code:'+60',cc:'my',name:'Malaysia',abbr:'MY'},
+        {code:'+65',cc:'sg',name:'Singapore',abbr:'SG'},
+        {code:'+66',cc:'th',name:'Thailand',abbr:'TH'},
+        {code:'+62',cc:'id',name:'Indonesia',abbr:'ID'},
+        {code:'+84',cc:'vn',name:'Vietnam',abbr:'VN'},
+        {code:'+82',cc:'kr',name:'South Korea',abbr:'KR'},
+        {code:'+880',cc:'bd',name:'Bangladesh',abbr:'BD'},
+        {code:'+92',cc:'pk',name:'Pakistan',abbr:'PK'},
+        {code:'+94',cc:'lk',name:'Sri Lanka',abbr:'LK'},
+        {code:'+977',cc:'np',name:'Nepal',abbr:'NP'},
+        {code:'+380',cc:'ua',name:'Ukraine',abbr:'UA'},
+        {code:'+48',cc:'pl',name:'Poland',abbr:'PL'},
+        {code:'+420',cc:'cz',name:'Czech Republic',abbr:'CZ'},
+        {code:'+36',cc:'hu',name:'Hungary',abbr:'HU'},
+        {code:'+40',cc:'ro',name:'Romania',abbr:'RO'},
+        {code:'+381',cc:'rs',name:'Serbia',abbr:'RS'},
+        {code:'+385',cc:'hr',name:'Croatia',abbr:'HR'},
+        {code:'+386',cc:'si',name:'Slovenia',abbr:'SI'},
+        {code:'+359',cc:'bg',name:'Bulgaria',abbr:'BG'},
+        {code:'+30',cc:'gr',name:'Greece',abbr:'GR'},
+        {code:'+351',cc:'pt',name:'Portugal',abbr:'PT'},
+        {code:'+352',cc:'lu',name:'Luxembourg',abbr:'LU'},
+        {code:'+31',cc:'nl',name:'Netherlands',abbr:'NL'},
+        {code:'+32',cc:'be',name:'Belgium',abbr:'BE'},
+        {code:'+41',cc:'ch',name:'Switzerland',abbr:'CH'},
+        {code:'+43',cc:'at',name:'Austria',abbr:'AT'},
+        {code:'+46',cc:'se',name:'Sweden',abbr:'SE'},
+        {code:'+47',cc:'no',name:'Norway',abbr:'NO'},
+        {code:'+45',cc:'dk',name:'Denmark',abbr:'DK'},
+        {code:'+358',cc:'fi',name:'Finland',abbr:'FI'},
+        {code:'+354',cc:'is',name:'Iceland',abbr:'IS'},
+        {code:'+353',cc:'ie',name:'Ireland',abbr:'IE'}
+      ];
+
+      var countryListEl = document.getElementById('country-options-list');
+      var countryTrigger = document.getElementById('phone-country-trigger');
+      var countryListWrap = document.getElementById('phone-country-list');
+      var countrySearch = document.getElementById('country-search');
+      var hiddenCodeInput = document.getElementById('car-country-code');
+      var selectedFlagImg = document.getElementById('selected-flag');
+      var selectedCodeText = document.getElementById('selected-code-text');
+
+      function renderCountryOptions(filter) {
+        var q = (filter || '').toLowerCase();
+        var filtered = countries.filter(function(c) {
+          return !q || c.name.toLowerCase().indexOf(q) !== -1 || c.code.indexOf(q) !== -1 || c.abbr.toLowerCase().indexOf(q) !== -1;
+        });
+        countryListEl.innerHTML = '';
+        filtered.forEach(function(c) {
+          var div = document.createElement('div');
+          div.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background 0.15s;';
+          div.innerHTML = '<img src="https://flagcdn.com/w40/' + c.cc + '.png" style="width:22px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0;">' +
+            '<span style="font-size:0.875rem;">' + c.name + '</span>' +
+            '<span style="font-size:0.8125rem;color:var(--gray-500);margin-left:auto;">' + c.code + '</span>';
+          div.addEventListener('mouseenter', function() { div.style.background = 'var(--gray-50)'; });
+          div.addEventListener('mouseleave', function() { div.style.background = ''; });
+          div.addEventListener('click', function() {
+            hiddenCodeInput.value = c.code;
+            selectedFlagImg.src = 'https://flagcdn.com/w40/' + c.cc + '.png';
+            selectedCodeText.textContent = c.code + ' (' + c.abbr + ')';
+            countryListWrap.style.display = 'none';
+            countrySearch.value = '';
+          });
+          countryListEl.appendChild(div);
+        });
+      }
+
+      renderCountryOptions('');
+
+      countryTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = countryListWrap.style.display !== 'none';
+        countryListWrap.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen) { countrySearch.value = ''; renderCountryOptions(''); countrySearch.focus(); }
+      });
+
+      countrySearch.addEventListener('input', function() {
+        renderCountryOptions(this.value);
+      });
+
+      countrySearch.addEventListener('click', function(e) { e.stopPropagation(); });
+
+      document.addEventListener('click', function(e) {
+        if (!document.getElementById('phone-country-wrap').contains(e.target)) {
+          countryListWrap.style.display = 'none';
+        }
+      });
+
+      // Photo slot click/preview/remove
+      document.querySelectorAll('.photo-slot').forEach(function (slot) {
+        var fileInput = slot.querySelector('.car-photo-input');
+        var placeholder = slot.querySelector('.slot-placeholder');
+        var preview = slot.querySelector('.slot-preview');
+        var removeBtn = slot.querySelector('.slot-remove');
+        var slotIndex = parseInt(fileInput.getAttribute('data-slot'));
+
+        slot.addEventListener('click', function (e) {
+          if (e.target === removeBtn || removeBtn.contains(e.target)) return;
+          fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function () {
+          if (this.files && this.files[0]) {
+            var file = this.files[0];
+            if (file.size > 10 * 1024 * 1024) {
+              showToast('File too large. Max 10MB.', 'error');
+              this.value = '';
+              return;
+            }
+            if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+              showToast('Only JPG, PNG, WebP allowed.', 'error');
+              this.value = '';
+              return;
+            }
+            photoFiles[slotIndex] = file;
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+              preview.src = ev.target.result;
+              preview.style.display = 'block';
+              placeholder.style.display = 'none';
+              removeBtn.style.display = 'flex';
+              slot.style.border = '2px solid var(--primary)';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        removeBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          photoFiles[slotIndex] = null;
+          fileInput.value = '';
+          preview.style.display = 'none';
+          placeholder.style.display = '';
+          removeBtn.style.display = 'none';
+          slot.style.border = '2px dashed var(--gray-300)';
+        });
+      });
+
+      function updateUI() {
+        panels.forEach(function (panel, i) {
+          panel.classList.toggle('hidden', i !== currentStep);
+        });
+        stepItems.forEach(function (item, i) {
+          item.classList.remove('active', 'completed');
+          if (i < currentStep) item.classList.add('completed');
+          if (i === currentStep) item.classList.add('active');
+        });
+      }
+
+      function validateStep(step) {
+        var panel = panels[step];
+        var inputs = panel.querySelectorAll('input[required], select[required], textarea[required]');
+        var valid = true;
+        inputs.forEach(function (input) {
+          input.style.borderColor = '';
+          if (!input.value.trim()) {
+            input.style.borderColor = 'var(--danger)';
+            valid = false;
+          }
+        });
+        if (valid && step === 3) {
+          if (!photoFiles[0] || !photoFiles[1] || !photoFiles[2]) {
+            showToast('Please upload all 3 photos.', 'error');
+            return false;
+          }
+        }
+        if (!valid) showToast('Please fill in all required fields.', 'error');
+        return valid;
+      }
+
+      window.nextStep = function () {
+        if (!validateStep(currentStep)) return;
+        if (currentStep < totalSteps - 1) {
+          currentStep++;
+          updateUI();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+
+      window.prevStep = function () {
+        if (currentStep > 0) {
+          currentStep--;
+          updateUI();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+
+      stepItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          var target = parseInt(item.getAttribute('data-step'));
+          if (target < currentStep) {
+            currentStep = target;
+            updateUI();
+          }
+        });
+      });
+
+      document.getElementById('listing-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!validateStep(currentStep)) return;
+
+        var submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating listing...';
+
+        var features = [];
+        document.querySelectorAll('input[name="features"]:checked').forEach(function (cb) {
+          features.push(cb.value);
+        });
+
+        var city = document.getElementById('car-city').value;
+        var state = document.getElementById('car-state').value;
+        var location = city + ', ' + state;
+
+        var countryCode = document.getElementById('car-country-code').value;
+        var phoneNumber = document.getElementById('car-phone').value;
+        var fullPhone = countryCode && phoneNumber ? countryCode + phoneNumber : '';
+
+        var carData = {
+          make: document.getElementById('car-make').value,
+          model: document.getElementById('car-model').value,
+          year: parseInt(document.getElementById('car-year').value),
+          type: document.getElementById('car-category').value,
+          category: document.getElementById('car-category').value.toLowerCase(),
+          dailyPrice: parseFloat(document.getElementById('car-price').value),
+          mileage: document.getElementById('car-mileage').value,
+          transmission: document.getElementById('car-transmission').value,
+          fuel: document.getElementById('car-fuel').value,
+          seats: parseInt(document.getElementById('car-seats').value),
+          location: location,
+          description: document.getElementById('car-description').value,
+          features: features,
+          phoneNumber: fullPhone
+        };
+
+        var result = await createCar(carData);
+        if (!result.success) {
+          showToast(result.error || 'Failed to list car. Please try again.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Listing';
+          return;
+        }
+
+        var carId = result.car.id;
+        submitBtn.textContent = 'Uploading photos...';
+
+        var formData = new FormData();
+        for (var i = 0; i < 3; i++) {
+          formData.append('images', photoFiles[i]);
+        }
+
+        try {
+          var uploadRes = await fetch('/api/images/upload/' + carId, { method: 'POST', body: formData });
+          var uploadData = await uploadRes.json();
+          if (uploadData.success) {
+            showToast('Your car has been listed successfully!', 'success');
+            setTimeout(function () { window.location.href = 'dashboard.html'; }, 1500);
+          } else {
+            showToast('Car listed but photo upload failed. ' + (uploadData.error || ''), 'error');
+            setTimeout(function () { window.location.href = 'dashboard.html'; }, 2000);
+          }
+        } catch (err) {
+          showToast('Car listed but photo upload failed.', 'error');
+          setTimeout(function () { window.location.href = 'dashboard.html'; }, 2000);
+        }
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

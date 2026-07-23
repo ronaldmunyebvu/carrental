@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - DriveShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+        DriveShare
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="search.html">Browse Cars</a>
+        <a href="list-car.html">List Your Car</a>
+      </div>
+      <div class="nav-actions">
+        <div id="nav-auth">
+          <a href="login.html" class="btn btn-ghost">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+        <div id="nav-user" class="hidden">
+          <a href="dashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+          <div class="nav-avatar" onclick="toggleDropdown()">SJ</div>
+          <div id="user-dropdown" class="nav-dropdown hidden">
+            <a href="profile.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              My Profile
+            </a>
+            <a href="dashboard.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Dashboard
+            </a>
+            <a href="list-car.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              List a Car
+            </a>
+            <hr>
+            <button onclick="logout()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </button>
+          </div>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Layout -->
+  <div class="dash-layout">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar" id="dash-sidebar">
+      <a href="dashboard.html" class="active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="#listings" data-page="listings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14"/></svg>
+        My Listings
+      </a>
+      <a href="#bookings" data-page="bookings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Bookings
+      </a>
+      <a href="#earnings" data-page="earnings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Earnings
+      </a>
+      <a href="profile.html" data-page="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </a>
+      <a href="#" data-page="help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Help
+      </a>
+    </aside>
+
+    <!-- Content -->
+    <main class="dash-content" id="dash-content">
+
+      <!-- Page Title -->
+      <div style="margin-bottom:32px;">
+        <h1 id="dash-greeting">Dashboard</h1>
+        <p style="color:var(--gray-700);margin-top:4px;">Welcome back! Here is an overview of your account.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="dash-stats">
+        <div class="dash-stat-card">
+          <div class="label">Total Earnings</div>
+          <div class="value" id="stat-earnings">$2,450</div>
+          <div class="change">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;"><polyline points="18,15 12,9 6,15"/></svg>
+            +12.5% this month
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="label">Active Listings</div>
+          <div class="value" id="stat-listings">3</div>
+          <div class="change">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;"><polyline points="18,15 12,9 6,15"/></svg>
+            +1 new this week
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="label">Pending Bookings</div>
+          <div class="value" id="stat-pending">2</div>
+          <div class="change">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;"><polyline points="6,9 12,15 18,9"/></svg>
+            -2 from last week
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="label">Total Trips</div>
+          <div class="value" id="stat-trips">12</div>
+          <div class="change">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;"><polyline points="18,15 12,9 6,15"/></svg>
+            +3 this month
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Bookings Table -->
+      <div class="dash-table-card" style="margin-bottom:32px;">
+        <div class="dash-table-header">
+          <h3>Bookings on My Cars <span style="font-size:0.8rem;color:var(--gray-500);font-weight:400;">(Approve or Reject)</span></h3>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="dash-table" id="owner-bookings-table">
+            <thead>
+              <tr>
+                <th>Car</th>
+                <th>Renter</th>
+                <th>Dates</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="owner-bookings-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- My Renter Bookings -->
+      <div class="dash-table-card" style="margin-bottom:32px;">
+        <div class="dash-table-header">
+          <h3>My Bookings <span style="font-size:0.8rem;color:var(--gray-500);font-weight:400;">(Cars I rented)</span></h3>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="dash-table" id="renter-bookings-table">
+            <thead>
+              <tr>
+                <th>Car</th>
+                <th>Dates</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Contact</th>
+              </tr>
+            </thead>
+            <tbody id="renter-bookings-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- My Listings -->
+      <div id="listings">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3>My Listings</h3>
+          <a href="list-car.html" class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add New Car
+          </a>
+        </div>
+        <div class="cars-grid" id="my-listings-grid">
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile sidebar toggle -->
+  <button class="dash-sidebar-toggle" id="dash-sidebar-toggle" onclick="document.getElementById('dash-sidebar').classList.toggle('show')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo" style="color: var(--primary);">
+            <svg viewBox="0 0 32 32" fill="currentColor" width="28" height="28"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+            DriveShare
+          </a>
+          <p>The trusted peer-to-peer car rental marketplace. Rent unique cars or earn money sharing yours.</p>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Safety</a></li>
+            <li><a href="#">Insurance</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Licenses</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 DriveShare. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top -->
+  <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18,15 12,9 6,15"/></svg>
+  </button>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    (async function () {
+      await checkAuth();
+      if (!APP.currentUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      var user = APP.currentUser;
+      var userCars = await fetchMyCars();
+      var ownerBookings = await fetchOwnerBookings();
+      var renterBookings = await fetchMyBookings();
+
+      document.getElementById('dash-greeting').textContent = 'Welcome back, ' + (user.fullName || user.full_name || user.name || '').split(' ')[0] + '!';
+
+      // Stats
+      var totalEarnings = 0;
+      var pendingOwnerCount = 0;
+      var completedTrips = 0;
+      ownerBookings.forEach(function (b) {
+        if (b.status === 'approved' || b.status === 'completed') {
+          totalEarnings += b.total;
+          completedTrips++;
+        } else if (b.status === 'pending') {
+          pendingOwnerCount++;
+        }
+      });
+
+      document.getElementById('stat-earnings').textContent = '$' + totalEarnings.toFixed(2);
+      document.getElementById('stat-listings').textContent = userCars.length;
+      document.getElementById('stat-pending').textContent = pendingOwnerCount;
+      document.getElementById('stat-trips').textContent = completedTrips;
+
+      // Owner Bookings Table (bookings on MY cars)
+      var ownerBody = document.getElementById('owner-bookings-body');
+      if (ownerBookings.length === 0) {
+        ownerBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray-500);">No bookings on your cars yet.</td></tr>';
+      } else {
+        var ownerRows = '';
+        ownerBookings.forEach(function (b) {
+          var statusClass = 'status-' + b.status;
+          var actionBtns = '';
+          if (b.status === 'pending') {
+            actionBtns =
+              '<button class="btn btn-primary btn-sm" style="margin-right:4px;" onclick="handleApprove(' + b.id + ', this)">Approve</button>' +
+              '<button class="btn btn-ghost btn-sm" style="border:1px solid var(--gray-300);" onclick="handleReject(' + b.id + ', this)">Reject</button>';
+          } else if (b.status === 'approved') {
+            actionBtns = '<span style="color:var(--primary);font-size:0.8rem;">Confirmed</span>';
+          } else if (b.status === 'rejected') {
+            actionBtns = '<span style="color:var(--danger);font-size:0.8rem;">Rejected</span>';
+          }
+          ownerRows += '<tr id="booking-row-' + b.id + '">' +
+            '<td><strong>' + b.carTitle + '</strong></td>' +
+            '<td>Renter #' + b.renterId + '</td>' +
+            '<td>' + b.startDate + ' to ' + b.endDate + '</td>' +
+            '<td><span class="status-badge ' + statusClass + '">' + b.status.charAt(0).toUpperCase() + b.status.slice(1) + '</span></td>' +
+            '<td><strong>$' + b.total.toFixed(2) + '</strong></td>' +
+            '<td>' + actionBtns + '</td>' +
+          '</tr>';
+        });
+        ownerBody.innerHTML = ownerRows;
+      }
+
+      // Renter Bookings Table (cars I rented)
+      var renterBody = document.getElementById('renter-bookings-body');
+      if (renterBookings.length === 0) {
+        renterBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--gray-500);">You haven\'t booked any cars yet.</td></tr>';
+      } else {
+        var renterRows = '';
+        renterBookings.forEach(function (b) {
+          var statusClass = 'status-' + b.status;
+          var statusIcon = '';
+          if (b.status === 'approved') statusIcon = ' ✅';
+          else if (b.status === 'rejected') statusIcon = ' ❌';
+          else if (b.status === 'pending') statusIcon = ' ⏳';
+
+          var contactHtml = '';
+          if (b.status === 'approved' && b.phoneNumber) {
+            var cleanPhone = b.phoneNumber.replace(/[^0-9+]/g, '');
+            var whatsappDigits = cleanPhone.replace(/^\+/, '');
+            contactHtml = '<div style="display:flex;flex-direction:column;gap:4px;">' +
+              '<a href="tel:' + cleanPhone + '" style="color:var(--primary);font-size:0.85rem;text-decoration:none;">' + cleanPhone + '</a>' +
+              '<a href="https://wa.me/' + whatsappDigits + '" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:6px 12px;border-radius:8px;font-size:0.8rem;text-decoration:none;font-weight:500;width:fit-content;">' +
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
+                'Let\'s Chat on WhatsApp' +
+              '</a>' +
+            '</div>';
+          } else if (b.status === 'approved') {
+            contactHtml = '<span style="color:var(--gray-500);font-size:0.8rem;">Phone not available</span>';
+          } else if (b.status === 'pending') {
+            contactHtml = '<span style="color:var(--gray-400);font-size:0.8rem;">After approval</span>';
+          } else {
+            contactHtml = '<span style="color:var(--gray-400);font-size:0.8rem;">-</span>';
+          }
+
+          renterRows += '<tr>' +
+            '<td><strong>' + (b.carTitle || 'Car #' + b.carId) + '</strong></td>' +
+            '<td>' + b.startDate + ' to ' + b.endDate + '</td>' +
+            '<td><span class="status-badge ' + statusClass + '">' + b.status.charAt(0).toUpperCase() + b.status.slice(1) + statusIcon + '</span></td>' +
+            '<td><strong>$' + b.total.toFixed(2) + '</strong></td>' +
+            '<td>' + contactHtml + '</td>' +
+          '</tr>';
+        });
+        renterBody.innerHTML = renterRows;
+      }
+
+      // My Listings
+      var listingsGrid = document.getElementById('my-listings-grid');
+      if (userCars.length === 0) {
+        listingsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--gray-700);">' +
+          '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gray-500);margin-bottom:16px;"><path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14"/></svg>' +
+          '<h3 style="margin-bottom:8px;">No listings yet</h3>' +
+          '<p style="margin-bottom:16px;">Start earning by listing your car on DriveShare.</p>' +
+          '<a href="list-car.html" class="btn btn-primary btn-sm">List Your First Car</a>' +
+        '</div>';
+      } else {
+        listingsGrid.innerHTML = userCars.map(function (car) {
+          var hasImg = car.imagePaths && car.imagePaths.length > 0;
+          var imgContent = hasImg
+            ? '<img src="' + car.imagePaths[0] + '" style="width:100%;height:100%;object-fit:cover;">'
+            : '<div class="placeholder-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 17m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0M5 17H3v-6l2-5h9l4 5h3v6h-2M5 17h14M9 17v2M15 17v2"/></svg></div>';
+          return '<div class="car-card" data-car-id="' + car.id + '">' +
+            '<div class="car-card-img">' + imgContent + '</div>' +
+            '<div class="car-card-body">' +
+              '<div class="car-card-header">' +
+                '<div class="car-card-title">' + car.year + ' ' + car.make + ' ' + car.model + '</div>' +
+                '<div class="car-card-price">$' + car.dailyPrice.toFixed(2) + '<span>/day</span></div>' +
+              '</div>' +
+              '<div class="car-card-meta">' +
+                '<span>' + car.location + '</span>' +
+                '<span>' + car.seats + ' seats</span>' +
+                '<span>' + car.fuel + '</span>' +
+              '</div>' +
+              '<div style="display:flex;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-300);">' +
+                '<button class="btn btn-primary btn-sm" style="flex:1;" onclick="window.location.href=\'edit-car.html?id=' + car.id + '\'">Edit</button>' +
+                '<button class="btn btn-ghost btn-sm" style="flex:1;border:1px solid var(--danger);color:var(--danger);" onclick="handleDeleteCar(' + car.id + ', \'' + car.year + ' ' + car.make + ' ' + car.model + '\', this)">Delete</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+
+      // Approve/Reject handlers
+      window.handleApprove = async function (bookingId, btn) {
+        btn.disabled = true;
+        btn.textContent = '...';
+        var result = await approveBooking(bookingId);
+        if (result.success) {
+          showToast('Booking approved!', 'success');
+          var row = document.getElementById('booking-row-' + bookingId);
+          row.querySelector('.status-badge').className = 'status-badge status-approved';
+          row.querySelector('.status-badge').textContent = 'Approved';
+          row.querySelector('td:last-child').innerHTML = '<span style="color:var(--primary);font-size:0.8rem;">Confirmed</span>';
+        } else {
+          showToast(result.error || 'Failed', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Approve';
+        }
+      };
+
+      window.handleReject = async function (bookingId, btn) {
+        btn.disabled = true;
+        btn.textContent = '...';
+        var result = await rejectBooking(bookingId);
+        if (result.success) {
+          showToast('Booking rejected.', 'success');
+          var row = document.getElementById('booking-row-' + bookingId);
+          row.querySelector('.status-badge').className = 'status-badge status-rejected';
+          row.querySelector('.status-badge').textContent = 'Rejected';
+          row.querySelector('td:last-child').innerHTML = '<span style="color:var(--danger);font-size:0.8rem;">Rejected</span>';
+        } else {
+          showToast(result.error || 'Failed', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Reject';
+        }
+      };
+
+      // Delete car handler
+      window.handleDeleteCar = async function (carId, carName, btn) {
+        if (!confirm('Are you sure you want to delete "' + carName + '"? This cannot be undone.')) return;
+        btn.disabled = true;
+        btn.textContent = 'Deleting...';
+        var result = await deleteCar(carId);
+        if (result.success) {
+          showToast('Car deleted.', 'success');
+          btn.closest('.car-card').remove();
+        } else {
+          showToast(result.error || 'Failed to delete', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Delete';
+        }
+      };
+
+      // Sidebar
+      var sidebarLinks = document.querySelectorAll('.dash-sidebar a');
+      sidebarLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          var page = this.getAttribute('data-page');
+          if (page === 'help') {
+            e.preventDefault();
+            showToast('Help center coming soon!', 'success');
+            return;
+          }
+          sidebarLinks.forEach(function (l) { l.classList.remove('active'); });
+          this.classList.add('active');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

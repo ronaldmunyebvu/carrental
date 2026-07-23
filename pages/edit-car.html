@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Car - DriveShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M5 16c0-1.5.8-3 2-4l4-2c1-.5 2-1.5 2.5-2.5L15 5h2l1.5 2.5c.5 1 1.5 2 2.5 2.5l4 2c1.2 1 2 2.5 2 4v8c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-2h-4v2c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-8z"/><circle cx="11" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/></svg>
+        DriveShare
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="search.html">Browse Cars</a>
+        <a href="list-car.html">List Your Car</a>
+      </div>
+      <div class="nav-actions">
+        <div id="nav-auth">
+          <a href="login.html" class="btn btn-ghost">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+        <div id="nav-user" class="hidden">
+          <a href="dashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+          <div class="nav-avatar" onclick="toggleDropdown()">SJ</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="dashboard.html">Dashboard</a>
+        <span>/</span>
+        <span>Edit Car</span>
+      </div>
+      <h1>Edit Car</h1>
+      <p>Update your car listing details</p>
+    </div>
+  </section>
+
+  <!-- Edit Form -->
+  <div class="container" style="max-width:800px;margin-bottom:80px;">
+    <form id="edit-form" style="background:#fff;border-radius:16px;padding:40px;box-shadow:var(--shadow-sm);">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="car-make">Make *</label>
+          <input type="text" id="car-make" name="make" required>
+        </div>
+        <div class="form-group">
+          <label for="car-model">Model *</label>
+          <input type="text" id="car-model" name="model" required>
+        </div>
+        <div class="form-group">
+          <label for="car-year">Year *</label>
+          <select id="car-year" name="year" required></select>
+        </div>
+        <div class="form-group">
+          <label for="car-category">Category *</label>
+          <select id="car-category" name="category" required>
+            <option value="">Select category</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Sports">Sports</option>
+            <option value="Wagon">Wagon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="car-mileage">Mileage</label>
+          <input type="text" id="car-mileage" name="mileage">
+        </div>
+        <div class="form-group">
+          <label for="car-transmission">Transmission</label>
+          <select id="car-transmission" name="transmission">
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="car-fuel">Fuel Type</label>
+          <select id="car-fuel" name="fuel">
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Electric">Electric</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="car-seats">Seats</label>
+          <input type="number" id="car-seats" name="seats" min="1" max="12">
+        </div>
+        <div class="form-group">
+          <label for="car-price">Daily Price ($)</label>
+          <input type="text" id="car-price" name="dailyPrice">
+        </div>
+        <div class="form-group full">
+          <label for="car-location">Location</label>
+          <input type="text" id="car-location" name="location">
+        </div>
+        <div class="form-group full">
+          <label for="car-phone">Phone Number (for WhatsApp)</label>
+          <div style="display:flex;gap:8px;">
+            <div class="phone-country-wrap" id="phone-country-wrap" style="position:relative;width:220px;flex-shrink:0;">
+              <div class="phone-country-trigger" id="phone-country-trigger" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-300);border-radius:8px;cursor:pointer;background:#fff;height:44px;box-sizing:border-box;">
+                <img id="selected-flag" src="https://flagcdn.com/w40/zw.png" style="width:22px;height:16px;object-fit:cover;border-radius:2px;">
+                <span id="selected-code-text" style="font-size:0.875rem;white-space:nowrap;">+263 (ZW)</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;"><polyline points="6,9 12,15 18,9"/></svg>
+              </div>
+              <div class="phone-country-list" id="phone-country-list" style="display:none;position:absolute;top:48px;left:0;right:0;background:#fff;border:1px solid var(--gray-300);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:100;max-height:260px;overflow:hidden;">
+                <div style="padding:8px;border-bottom:1px solid var(--gray-200);">
+                  <input type="text" id="country-search" placeholder="Search country..." style="width:100%;border:1px solid var(--gray-300);border-radius:6px;padding:6px 10px;font-size:0.8125rem;outline:none;box-sizing:border-box;">
+                </div>
+                <div style="overflow-y:auto;max-height:210px;" id="country-options-list">
+                </div>
+              </div>
+              <input type="hidden" id="car-country-code" name="countryCode" value="">
+            </div>
+            <input type="tel" id="car-phone" name="phoneNumber" placeholder="e.g. 77 123 4567" style="flex:1;">
+          </div>
+          <p style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;">This number will only be shared with renters after their booking is approved.</p>
+        </div>
+        <div class="form-group full">
+          <label for="car-description">Description</label>
+          <textarea id="car-description" name="description" rows="4"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Features</label>
+          <div id="features-checklist" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:8px;">
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:32px;">
+        <button type="submit" class="btn btn-primary" style="flex:1;">Save Changes</button>
+        <a href="dashboard.html" class="btn btn-secondary" style="flex:1;text-align:center;">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>&copy; 2025 DriveShare. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    var ALL_FEATURES = ['Leather Seats','GPS','Bluetooth','Sunroof','Heated Seats','Backup Camera','USB Ports','Apple CarPlay','All-Wheel Drive','Premium Sound','Autopilot','Wireless Charging'];
+
+    (async function () {
+      await checkAuth();
+      if (!APP.currentUser) { window.location.href = 'login.html'; return; }
+
+      var params = new URLSearchParams(window.location.search);
+      var carId = params.get('id');
+      if (!carId) { window.location.href = 'dashboard.html'; return; }
+
+      var car = await fetchCar(carId);
+      if (!car) { showToast('Car not found', 'error'); window.location.href = 'dashboard.html'; return; }
+      if (car.ownerId !== APP.currentUser.id) { showToast('Not your car', 'error'); window.location.href = 'dashboard.html'; return; }
+
+      // Populate year
+      var yearSelect = document.getElementById('car-year');
+      for (var y = 2025; y >= 2015; y--) {
+        var opt = document.createElement('option');
+        opt.value = y; opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+
+      // Fill form
+      document.getElementById('car-make').value = car.make || '';
+      document.getElementById('car-model').value = car.model || '';
+      yearSelect.value = car.year || 2024;
+      document.getElementById('car-category').value = car.category || '';
+      document.getElementById('car-mileage').value = car.mileage || '';
+      document.getElementById('car-transmission').value = car.transmission || 'Automatic';
+      document.getElementById('car-fuel').value = car.fuel || 'Gasoline';
+      document.getElementById('car-seats').value = car.seats || 5;
+      document.getElementById('car-price').value = car.dailyPrice || '';
+      document.getElementById('car-location').value = car.location || '';
+      document.getElementById('car-description').value = car.description || '';
+
+      // Pre-fill phone number with custom dropdown
+      var countries = [
+        {code:'+1',cc:'us',name:'United States',abbr:'US'},
+        {code:'+44',cc:'gb',name:'United Kingdom',abbr:'UK'},
+        {code:'+27',cc:'za',name:'South Africa',abbr:'SA'},
+        {code:'+234',cc:'ng',name:'Nigeria',abbr:'NG'},
+        {code:'+254',cc:'ke',name:'Kenya',abbr:'KE'},
+        {code:'+256',cc:'ug',name:'Uganda',abbr:'UG'},
+        {code:'+255',cc:'tz',name:'Tanzania',abbr:'TZ'},
+        {code:'+260',cc:'zm',name:'Zambia',abbr:'ZM'},
+        {code:'+263',cc:'zw',name:'Zimbabwe',abbr:'ZW'},
+        {code:'+91',cc:'in',name:'India',abbr:'IN'},
+        {code:'+86',cc:'cn',name:'China',abbr:'CN'},
+        {code:'+81',cc:'jp',name:'Japan',abbr:'JP'},
+        {code:'+49',cc:'de',name:'Germany',abbr:'DE'},
+        {code:'+33',cc:'fr',name:'France',abbr:'FR'},
+        {code:'+34',cc:'es',name:'Spain',abbr:'ES'},
+        {code:'+39',cc:'it',name:'Italy',abbr:'IT'},
+        {code:'+55',cc:'br',name:'Brazil',abbr:'BR'},
+        {code:'+52',cc:'mx',name:'Mexico',abbr:'MX'},
+        {code:'+61',cc:'au',name:'Australia',abbr:'AU'},
+        {code:'+64',cc:'nz',name:'New Zealand',abbr:'NZ'},
+        {code:'+971',cc:'ae',name:'United Arab Emirates',abbr:'UAE'},
+        {code:'+966',cc:'sa',name:'Saudi Arabia',abbr:'KSA'},
+        {code:'+20',cc:'eg',name:'Egypt',abbr:'EG'},
+        {code:'+212',cc:'ma',name:'Morocco',abbr:'MA'},
+        {code:'+216',cc:'tn',name:'Tunisia',abbr:'TN'},
+        {code:'+213',cc:'dz',name:'Algeria',abbr:'DZ'},
+        {code:'+221',cc:'sn',name:'Senegal',abbr:'SN'},
+        {code:'+225',cc:'ci',name:'Ivory Coast',abbr:'CI'},
+        {code:'+228',cc:'tg',name:'Togo',abbr:'TG'},
+        {code:'+229',cc:'bj',name:'Benin',abbr:'BJ'},
+        {code:'+233',cc:'gh',name:'Ghana',abbr:'GH'},
+        {code:'+237',cc:'cm',name:'Cameroon',abbr:'CM'},
+        {code:'+243',cc:'cd',name:'DR Congo',abbr:'CD'},
+        {code:'+250',cc:'rw',name:'Rwanda',abbr:'RW'},
+        {code:'+265',cc:'mw',name:'Malawi',abbr:'MW'},
+        {code:'+267',cc:'bw',name:'Botswana',abbr:'BW'},
+        {code:'+268',cc:'sz',name:'Eswatini',abbr:'SZ'},
+        {code:'+264',cc:'na',name:'Namibia',abbr:'NA'},
+        {code:'+262',cc:'re',name:'Reunion',abbr:'RE'},
+        {code:'+63',cc:'ph',name:'Philippines',abbr:'PH'},
+        {code:'+60',cc:'my',name:'Malaysia',abbr:'MY'},
+        {code:'+65',cc:'sg',name:'Singapore',abbr:'SG'},
+        {code:'+66',cc:'th',name:'Thailand',abbr:'TH'},
+        {code:'+62',cc:'id',name:'Indonesia',abbr:'ID'},
+        {code:'+84',cc:'vn',name:'Vietnam',abbr:'VN'},
+        {code:'+82',cc:'kr',name:'South Korea',abbr:'KR'},
+        {code:'+880',cc:'bd',name:'Bangladesh',abbr:'BD'},
+        {code:'+92',cc:'pk',name:'Pakistan',abbr:'PK'},
+        {code:'+94',cc:'lk',name:'Sri Lanka',abbr:'LK'},
+        {code:'+977',cc:'np',name:'Nepal',abbr:'NP'},
+        {code:'+380',cc:'ua',name:'Ukraine',abbr:'UA'},
+        {code:'+48',cc:'pl',name:'Poland',abbr:'PL'},
+        {code:'+420',cc:'cz',name:'Czech Republic',abbr:'CZ'},
+        {code:'+36',cc:'hu',name:'Hungary',abbr:'HU'},
+        {code:'+40',cc:'ro',name:'Romania',abbr:'RO'},
+        {code:'+381',cc:'rs',name:'Serbia',abbr:'RS'},
+        {code:'+385',cc:'hr',name:'Croatia',abbr:'HR'},
+        {code:'+386',cc:'si',name:'Slovenia',abbr:'SI'},
+        {code:'+359',cc:'bg',name:'Bulgaria',abbr:'BG'},
+        {code:'+30',cc:'gr',name:'Greece',abbr:'GR'},
+        {code:'+351',cc:'pt',name:'Portugal',abbr:'PT'},
+        {code:'+352',cc:'lu',name:'Luxembourg',abbr:'LU'},
+        {code:'+31',cc:'nl',name:'Netherlands',abbr:'NL'},
+        {code:'+32',cc:'be',name:'Belgium',abbr:'BE'},
+        {code:'+41',cc:'ch',name:'Switzerland',abbr:'CH'},
+        {code:'+43',cc:'at',name:'Austria',abbr:'AT'},
+        {code:'+46',cc:'se',name:'Sweden',abbr:'SE'},
+        {code:'+47',cc:'no',name:'Norway',abbr:'NO'},
+        {code:'+45',cc:'dk',name:'Denmark',abbr:'DK'},
+        {code:'+358',cc:'fi',name:'Finland',abbr:'FI'},
+        {code:'+354',cc:'is',name:'Iceland',abbr:'IS'},
+        {code:'+353',cc:'ie',name:'Ireland',abbr:'IE'}
+      ];
+
+      var countryListEl = document.getElementById('country-options-list');
+      var countryTrigger = document.getElementById('phone-country-trigger');
+      var countryListWrap = document.getElementById('phone-country-list');
+      var countrySearch = document.getElementById('country-search');
+      var hiddenCodeInput = document.getElementById('car-country-code');
+      var selectedFlagImg = document.getElementById('selected-flag');
+      var selectedCodeText = document.getElementById('selected-code-text');
+
+      function renderCountryOptions(filter) {
+        var q = (filter || '').toLowerCase();
+        var filtered = countries.filter(function(c) {
+          return !q || c.name.toLowerCase().indexOf(q) !== -1 || c.code.indexOf(q) !== -1 || c.abbr.toLowerCase().indexOf(q) !== -1;
+        });
+        countryListEl.innerHTML = '';
+        filtered.forEach(function(c) {
+          var div = document.createElement('div');
+          div.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background 0.15s;';
+          div.innerHTML = '<img src="https://flagcdn.com/w40/' + c.cc + '.png" style="width:22px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0;">' +
+            '<span style="font-size:0.875rem;">' + c.name + '</span>' +
+            '<span style="font-size:0.8125rem;color:var(--gray-500);margin-left:auto;">' + c.code + '</span>';
+          div.addEventListener('mouseenter', function() { div.style.background = 'var(--gray-50)'; });
+          div.addEventListener('mouseleave', function() { div.style.background = ''; });
+          div.addEventListener('click', function() {
+            hiddenCodeInput.value = c.code;
+            selectedFlagImg.src = 'https://flagcdn.com/w40/' + c.cc + '.png';
+            selectedCodeText.textContent = c.code + ' (' + c.abbr + ')';
+            countryListWrap.style.display = 'none';
+            countrySearch.value = '';
+          });
+          countryListEl.appendChild(div);
+        });
+      }
+
+      renderCountryOptions('');
+
+      countryTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = countryListWrap.style.display !== 'none';
+        countryListWrap.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen) { countrySearch.value = ''; renderCountryOptions(''); countrySearch.focus(); }
+      });
+
+      countrySearch.addEventListener('input', function() { renderCountryOptions(this.value); });
+      countrySearch.addEventListener('click', function(e) { e.stopPropagation(); });
+      document.addEventListener('click', function(e) {
+        if (!document.getElementById('phone-country-wrap').contains(e.target)) {
+          countryListWrap.style.display = 'none';
+        }
+      });
+
+      // Pre-fill phone number from saved data
+      if (car.phoneNumber) {
+        var phone = car.phoneNumber;
+        var matchedCountry = null;
+        for (var i = 0; i < countries.length; i++) {
+          if (phone.startsWith(countries[i].code)) {
+            if (!matchedCountry || countries[i].code.length > matchedCountry.code.length) {
+              matchedCountry = countries[i];
+            }
+          }
+        }
+        if (matchedCountry) {
+          hiddenCodeInput.value = matchedCountry.code;
+          selectedFlagImg.src = 'https://flagcdn.com/w40/' + matchedCountry.cc + '.png';
+          selectedCodeText.textContent = matchedCountry.code + ' (' + matchedCountry.abbr + ')';
+          document.getElementById('car-phone').value = phone.substring(matchedCountry.code.length);
+        } else {
+          document.getElementById('car-phone').value = phone;
+        }
+      }
+
+      // Features checklist
+      var featuresChecklist = document.getElementById('features-checklist');
+      ALL_FEATURES.forEach(function (f) {
+        var checked = car.features && car.features.indexOf(f) !== -1 ? ' checked' : '';
+        featuresChecklist.innerHTML += '<label class="filter-option"><input type="checkbox" name="features" value="' + f + '"' + checked + '> ' + f + '</label>';
+      });
+
+      document.getElementById('edit-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Saving...';
+
+        var features = [];
+        document.querySelectorAll('input[name="features"]:checked').forEach(function (cb) { features.push(cb.value); });
+
+        var countryCode = document.getElementById('car-country-code').value;
+        var phoneNumber = document.getElementById('car-phone').value;
+        var fullPhone = countryCode && phoneNumber ? countryCode + phoneNumber : '';
+
+        var data = {
+          make: document.getElementById('car-make').value,
+          model: document.getElementById('car-model').value,
+          year: parseInt(yearSelect.value),
+          category: document.getElementById('car-category').value,
+          type: document.getElementById('car-category').value,
+          mileage: document.getElementById('car-mileage').value,
+          transmission: document.getElementById('car-transmission').value,
+          fuel: document.getElementById('car-fuel').value,
+          seats: parseInt(document.getElementById('car-seats').value) || 5,
+          dailyPrice: parseFloat(document.getElementById('car-price').value) || 0,
+          location: document.getElementById('car-location').value,
+          description: document.getElementById('car-description').value,
+          features: features,
+          phoneNumber: fullPhone
+        };
+
+        var result = await updateCar(carId, data);
+        if (result.success) {
+          showToast('Car updated successfully!', 'success');
+          setTimeout(function () { window.location.href = 'dashboard.html'; }, 1200);
+        } else {
+          showToast(result.error || 'Failed to update', 'error');
+          btn.disabled = false; btn.textContent = 'Save Changes';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
