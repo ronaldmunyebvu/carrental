@@ -90,9 +90,15 @@ app.post('/api/auth/signup', async (req, res) => {
       'INSERT INTO email_confirmation_tokens (user_id, token, expiry_date) VALUES ($1,$2,$3)',
       [user.id, token, expiry]
     );
-    try { await sendConfirmationEmail({ firstName, email }, token); } catch (e) { console.error('Email send failed:', e.message); }
+    let emailSent = true;
+    try { await sendConfirmationEmail({ firstName, email }, token); } catch (e) {
+      console.error('Email send failed:', e.message);
+      emailSent = false;
+    }
 
-    res.status(201).json({ success: true, user: getUserObj(user) });
+    const response = { success: true, user: getUserObj(user) };
+    if (!emailSent) response.warning = 'Account created but confirmation email could not be sent. Please use Resend Confirmation.';
+    res.status(201).json(response);
   } catch (err) {
     console.error('Signup error:', err);
     res.status(500).json({ error: 'Server error' });
@@ -110,6 +116,10 @@ app.post('/api/auth/login', async (req, res) => {
     const user = result.rows[0];
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
+
+    if (!user.email_confirmed) {
+      return res.status(403).json({ error: 'Please confirm your email before logging in. Check your inbox for the confirmation link.' });
+    }
 
     const jwtToken = signToken(user);
     setAuthCookie(res, jwtToken);

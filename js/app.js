@@ -154,6 +154,24 @@ function updateNav() {
     authNav.classList.remove('hidden');
     userNav.classList.add('hidden');
   }
+  updateMobileAuth();
+}
+
+function updateMobileAuth() {
+  document.querySelectorAll('.nav-links').forEach(function (navLinks) {
+    var existing = navLinks.querySelector('.mobile-auth-links');
+    if (existing) existing.remove();
+    var div = document.createElement('div');
+    div.className = 'mobile-auth-links';
+    if (APP.currentUser) {
+      div.innerHTML = '<a href="dashboard.html">Dashboard</a>' +
+        '<a href="javascript:void(0)" onclick="logout()">Log Out</a>';
+    } else {
+      div.innerHTML = '<a href="login.html" style="color:var(--gray-700);">Log In</a>' +
+        '<a href="signup.html" class="btn btn-primary btn-block" style="text-align:center;">Sign Up</a>';
+    }
+    navLinks.appendChild(div);
+  });
 }
 
 function toggleDropdown() {

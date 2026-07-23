@@ -116,6 +116,29 @@
   <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>
   <script>
+    (async function () {
+      var params = new URLSearchParams(window.location.search);
+      var token = params.get('token');
+      if (token) {
+        try {
+          var res = await fetch('/api/auth/confirm-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+          });
+          var data = await res.json();
+          if (data.success) {
+            showToast('Email confirmed! You can now log in.', 'success');
+          } else {
+            showToast(data.error || 'Invalid or expired confirmation link.', 'error');
+          }
+        } catch (err) {
+          showToast('Failed to confirm email.', 'error');
+        }
+        window.history.replaceState({}, '', 'login.html');
+      }
+    })();
+
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('email').value;
