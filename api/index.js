@@ -579,6 +579,39 @@ app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/test-email', async (req, res) => {
+  try {
+    const testEmail = req.query.email || 'test@example.com';
+    const { sendConfirmationEmail } = require('./lib/mail');
+    await sendConfirmationEmail({ firstName: 'Test', email: testEmail }, 'test-token-123');
+    res.json({ success: true, message: 'Test email sent to ' + testEmail });
+  } catch (err) {
+    res.json({
+      success: false,
+      error: err.message,
+      brevoUser: process.env.BREVO_USER || 'NOT SET',
+      brevoHost: process.env.BREVO_HOST || 'NOT SET',
+      siteUrl: process.env.SITE_URL || 'NOT SET'
+    });
+  }
+});
+
+app.post('/api/admin/clear-all', async (req, res) => {
+  if (req.body.secret !== 'driveshare-reset-2026') return res.status(403).json({ error: 'Forbidden' });
+  try {
+    await pool.query('DELETE FROM email_confirmation_tokens');
+    await pool.query('DELETE FROM password_reset_tokens');
+    await pool.query('DELETE FROM bookings');
+    await pool.query('DELETE FROM car_images');
+    await pool.query('DELETE FROM cars');
+    await pool.query('DELETE FROM users2');
+    res.json({ success: true, message: 'All accounts cleared.' });
+  } catch (err) {
+    console.error('Clear accounts error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // ============================================================
 //  STATIC FILES (for local development)
 // ============================================================
