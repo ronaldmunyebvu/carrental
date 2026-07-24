@@ -19,7 +19,7 @@ async function sendConfirmationEmail(user, token) {
   console.log('Sending confirmation email to:', user.email, 'Link:', link);
   const transporter = createTransporter();
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'no-reply@driveshare.com',
+    from: process.env.EMAIL_FROM || 'rmmunyebvu@gmail.com',
     to: user.email,
     subject: 'DriveShare - Confirm Your Email',
     html: `
@@ -37,7 +37,7 @@ async function sendPasswordResetEmail(user, token) {
   const link = `${SITE_URL}/pages/forgot-password.html?token=${token}`;
   const transporter = createTransporter();
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'no-reply@driveshare.com',
+    from: process.env.EMAIL_FROM || 'rmmunyebvu@gmail.com',
     to: user.email,
     subject: 'DriveShare - Reset Your Password',
     html: `
@@ -52,7 +52,7 @@ async function sendPasswordResetEmail(user, token) {
 async function sendBookingConfirmationEmail(user, booking, car) {
   const transporter = createTransporter();
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'no-reply@driveshare.com',
+    from: process.env.EMAIL_FROM || 'rmmunyebvu@gmail.com',
     to: user.email,
     subject: 'DriveShare - Booking Confirmed',
     html: `
@@ -65,4 +65,4 @@ async function sendBookingConfirmationEmail(user, booking, car) {
   });
 }
 
-module.exports = { createTransporter, sendConfirmationEmail, sendPasswordResetEmail, sendBookingConfirmationEmail };
+module.exports = { sendConfirmationEmail, sendPasswordResetEmail, sendBookingConfirmationEmail };

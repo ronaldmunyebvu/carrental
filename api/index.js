@@ -581,40 +581,6 @@ app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
   }
 });
 
-app.get('/api/test-email', async (req, res) => {
-  try {
-    const testEmail = req.query.email || 'test@example.com';
-    const from = req.query.from || process.env.EMAIL_FROM || 'no-reply@driveshare.com';
-    const { createTransporter } = require('./lib/mail');
-    const transporter = createTransporter();
-    await transporter.sendMail({
-      from: from,
-      to: testEmail,
-      subject: 'DriveShare - Test Email',
-      html: '<h2>Test Email</h2><p>If you received this, emails are working!</p>',
-    });
-    res.json({ success: true, message: 'Test email sent from: ' + from + ' to: ' + testEmail });
-  } catch (err) {
-    res.json({ success: false, error: err.message });
-  }
-});
-
-app.post('/api/admin/clear-all', async (req, res) => {
-  if (req.body.secret !== 'driveshare-reset-2026') return res.status(403).json({ error: 'Forbidden' });
-  try {
-    await pool.query('DELETE FROM email_confirmation_tokens');
-    await pool.query('DELETE FROM password_reset_tokens');
-    await pool.query('DELETE FROM bookings');
-    await pool.query('DELETE FROM car_images');
-    await pool.query('DELETE FROM cars');
-    await pool.query('DELETE FROM users2');
-    res.json({ success: true, message: 'All accounts cleared.' });
-  } catch (err) {
-    console.error('Clear accounts error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
 // ============================================================
 //  STATIC FILES (for local development)
 // ============================================================
