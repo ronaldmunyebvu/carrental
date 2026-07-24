@@ -33,8 +33,7 @@ async function sendConfirmationEmail(user, token) {
   console.log('Confirmation email sent successfully to:', user.email);
 }
 
-async function sendPasswordResetEmail(user, token) {
-  const link = `${SITE_URL}/pages/forgot-password.html?token=${token}`;
+async function sendPasswordResetEmail(user, code) {
   const transporter = createTransporter();
   await transporter.sendMail({
     from: process.env.EMAIL_FROM || 'rmmunyebvu@gmail.com',
@@ -42,9 +41,10 @@ async function sendPasswordResetEmail(user, token) {
     subject: 'DriveShare - Reset Your Password',
     html: `
       <h2>Password Reset Request</h2>
-      <p>Hi ${user.firstName}, click the link below to reset your password:</p>
-      <a href="${link}" style="display:inline-block;padding:12px 24px;background:#e8371d;color:#fff;text-decoration:none;border-radius:8px;">Reset Password</a>
-      <p style="margin-top:16px;color:#666;">If you did not request a password reset, please ignore this email.</p>
+      <p>Hi ${user.firstName}, here is your 6-digit reset code:</p>
+      <p style="font-size:28px;font-weight:bold;letter-spacing:8px;padding:20px;background:#f5f5f5;text-align:center;border-radius:8px;margin:20px 0;">${code}</p>
+      <p style="color:#666;">This code expires in 15 minutes.</p>
+      <p style="color:#666;">If you did not request a password reset, please ignore this email.</p>
     `,
   });
 }
