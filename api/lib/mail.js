@@ -65,4 +65,4 @@ async function sendBookingConfirmationEmail(user, booking, car) {
   });
 }
 
-module.exports = { sendConfirmationEmail, sendPasswordResetEmail, sendBookingConfirmationEmail };
+module.exports = { createTransporter, sendConfirmationEmail, sendPasswordResetEmail, sendBookingConfirmationEmail };
