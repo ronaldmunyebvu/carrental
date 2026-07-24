@@ -91,8 +91,10 @@ app.post('/api/auth/signup', async (req, res) => {
       [user.id, token, expiry]
     );
     let emailSent = true;
-    try { await sendConfirmationEmail({ firstName, email }, token); } catch (e) {
-      console.error('Email send failed:', e.message);
+    try {
+      await sendConfirmationEmail({ firstName, email }, token);
+    } catch (e) {
+      console.error('Email send failed:', e.message || e);
       emailSent = false;
     }
 
@@ -159,7 +161,11 @@ app.post('/api/auth/confirm-email', async (req, res) => {
     const record = result.rows[0];
     await pool.query('UPDATE users2 SET email_confirmed = TRUE WHERE id = $1', [record.user_id]);
     await pool.query('DELETE FROM email_confirmation_tokens WHERE id = $1', [record.id]);
-    res.json({ success: true });
+    const userResult = await pool.query('SELECT * FROM users2 WHERE id = $1', [record.user_id]);
+    const user = userResult.rows[0];
+    const jwtToken = signToken(user);
+    setAuthCookie(res, jwtToken);
+    res.json({ success: true, user: getUserObj(user) });
   } catch (err) {
     console.error('Confirm error:', err);
     res.status(500).json({ error: 'Server error' });
@@ -242,7 +248,7 @@ app.post('/api/auth/resend-confirmation', async (req, res) => {
       'INSERT INTO email_confirmation_tokens (user_id, token, expiry_date) VALUES ($1,$2,$3)',
       [user.id, token, expiry]
     );
-    try { await sendConfirmationEmail({ firstName: user.first_name, email }, token); } catch (e) { console.error('Resend email failed:', e.message); }
+    try { await sendConfirmationEmail({ firstName: user.first_name, email }, token); } catch (e) { console.error('Resend email failed:', e.message || e); }
     res.json({ message: 'Confirmation email sent' });
   } catch (err) {
     console.error('Resend confirmation error:', err);

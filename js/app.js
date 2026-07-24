@@ -10,13 +10,7 @@ async function signup(name, email, password) {
     body: JSON.stringify({ name, email, password })
   });
   const data = await res.json();
-  if (data.success) {
-    APP.currentUser = data.user;
-    localStorage.setItem('driveshare_user', JSON.stringify(data.user));
-    updateNav();
-    return true;
-  }
-  return false;
+  return data;
 }
 
 async function login(email, password) {
@@ -158,17 +152,19 @@ function updateNav() {
 }
 
 function updateMobileAuth() {
+  var inPages = window.location.pathname.indexOf('/pages/') !== -1;
+  var pre = inPages ? '' : 'pages/';
   document.querySelectorAll('.nav-links').forEach(function (navLinks) {
     var existing = navLinks.querySelector('.mobile-auth-links');
     if (existing) existing.remove();
     var div = document.createElement('div');
     div.className = 'mobile-auth-links';
     if (APP.currentUser) {
-      div.innerHTML = '<a href="dashboard.html">Dashboard</a>' +
+      div.innerHTML = '<a href="' + pre + 'dashboard.html">Dashboard</a>' +
         '<a href="javascript:void(0)" onclick="logout()">Log Out</a>';
     } else {
-      div.innerHTML = '<a href="login.html" style="color:var(--gray-700);">Log In</a>' +
-        '<a href="signup.html" class="btn btn-primary btn-block" style="text-align:center;">Sign Up</a>';
+      div.innerHTML = '<a href="' + pre + 'login.html" style="color:var(--gray-700);">Log In</a>' +
+        '<a href="' + pre + 'signup.html" class="btn btn-primary btn-block" style="text-align:center;">Sign Up</a>';
     }
     navLinks.appendChild(div);
   });

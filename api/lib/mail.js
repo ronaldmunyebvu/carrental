@@ -16,6 +16,7 @@ function createTransporter() {
 
 async function sendConfirmationEmail(user, token) {
   const link = `${SITE_URL}/pages/login.html?token=${token}`;
+  console.log('Sending confirmation email to:', user.email, 'Link:', link);
   const transporter = createTransporter();
   await transporter.sendMail({
     from: process.env.EMAIL_FROM || 'no-reply@driveshare.com',
@@ -25,9 +26,11 @@ async function sendConfirmationEmail(user, token) {
       <h2>Welcome to DriveShare, ${user.firstName}!</h2>
       <p>Please confirm your email address by clicking the link below:</p>
       <a href="${link}" style="display:inline-block;padding:12px 24px;background:#e8371d;color:#fff;text-decoration:none;border-radius:8px;">Confirm Email</a>
-      <p style="margin-top:16px;color:#666;">If you did not create an account, please ignore this email.</p>
+      <p style="margin-top:16px;color:#666;">This link expires in 24 hours.</p>
+      <p style="color:#666;">If you did not create an account, please ignore this email.</p>
     `,
   });
+  console.log('Confirmation email sent successfully to:', user.email);
 }
 
 async function sendPasswordResetEmail(user, token) {

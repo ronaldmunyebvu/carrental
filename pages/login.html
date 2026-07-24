@@ -128,7 +128,12 @@
           });
           var data = await res.json();
           if (data.success) {
-            showToast('Email confirmed! You can now log in.', 'success');
+            APP.currentUser = data.user;
+            localStorage.setItem('driveshare_user', JSON.stringify(data.user));
+            updateNav();
+            showToast('Email confirmed! Welcome to DriveShare.', 'success');
+            setTimeout(function () { window.location.href = '../index.html'; }, 1500);
+            return;
           } else {
             showToast(data.error || 'Invalid or expired confirmation link.', 'error');
           }
