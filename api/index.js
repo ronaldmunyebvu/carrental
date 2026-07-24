@@ -91,15 +91,17 @@ app.post('/api/auth/signup', async (req, res) => {
       [user.id, token, expiry]
     );
     let emailSent = true;
+    let emailError = null;
     try {
       await sendConfirmationEmail({ firstName, email }, token);
     } catch (e) {
       console.error('Email send failed:', e.message || e);
+      emailError = e.message || String(e);
       emailSent = false;
     }
 
     const response = { success: true, user: getUserObj(user) };
-    if (!emailSent) response.warning = 'Account created but confirmation email could not be sent. Please use Resend Confirmation.';
+    if (!emailSent) response.warning = 'Confirmation email could not be sent: ' + emailError;
     res.status(201).json(response);
   } catch (err) {
     console.error('Signup error:', err);
@@ -576,6 +578,17 @@ app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
   } catch (err) {
     console.error('Reject booking error:', err);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.get('/api/test-email', async (req, res) => {
+  try {
+    const testEmail = req.query.email || 'test@example.com';
+    const { sendConfirmationEmail } = require('./lib/mail');
+    await sendConfirmationEmail({ firstName: 'Test', email: testEmail }, 'test-token-123');
+    res.json({ success: true, message: 'Email sent to ' + testEmail });
+  } catch (err) {
+    res.json({ success: false, error: err.message });
   }
 });
 
