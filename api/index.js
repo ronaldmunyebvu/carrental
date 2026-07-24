@@ -580,25 +580,6 @@ app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
 });
 
 // ============================================================
-//  ADMIN: Clear all accounts (one-time use)
-// ============================================================
-app.post('/api/admin/clear-all', async (req, res) => {
-  if (req.body.secret !== 'driveshare-reset-2026') return res.status(403).json({ error: 'Forbidden' });
-  try {
-    await pool.query('DELETE FROM email_confirmation_tokens');
-    await pool.query('DELETE FROM password_reset_tokens');
-    await pool.query('DELETE FROM bookings');
-    await pool.query('DELETE FROM car_images');
-    await pool.query('DELETE FROM cars');
-    await pool.query('DELETE FROM users2');
-    res.json({ success: true, message: 'All accounts cleared.' });
-  } catch (err) {
-    console.error('Clear accounts error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// ============================================================
 //  STATIC FILES (for local development)
 // ============================================================
 if (process.env.NODE_ENV !== 'production') {
