@@ -579,6 +579,17 @@ app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/test-email', async (req, res) => {
+  try {
+    const testEmail = req.query.email || 'test@example.com';
+    const { sendConfirmationEmail } = require('./lib/mail');
+    await sendConfirmationEmail({ firstName: 'Test', email: testEmail }, 'test-token-123');
+    res.json({ success: true, message: 'Test email sent to ' + testEmail });
+  } catch (err) {
+    res.json({ success: false, error: err.message, resendKeySet: !!process.env.RESEND_API_KEY, siteUrl: process.env.SITE_URL || 'not set' });
+  }
+});
+
 // ============================================================
 //  STATIC FILES (for local development)
 // ============================================================
