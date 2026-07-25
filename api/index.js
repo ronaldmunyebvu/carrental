@@ -582,6 +582,29 @@ app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
 });
 
 // ============================================================
+//  ADMIN ROUTES
+// ============================================================
+
+app.delete('/api/admin/clear-accounts', async (req, res) => {
+  try {
+    const adminKey = req.headers['x-admin-key'];
+    if (!adminKey || adminKey !== (process.env.ADMIN_KEY || 'dev-admin-key-change-me')) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    await pool.query('DELETE FROM password_reset_tokens');
+    await pool.query('DELETE FROM email_confirmation_tokens');
+    await pool.query('DELETE FROM bookings');
+    await pool.query('DELETE FROM car_images');
+    await pool.query('DELETE FROM cars');
+    await pool.query('DELETE FROM users2');
+    res.json({ success: true, message: 'All accounts and related data cleared' });
+  } catch (err) {
+    console.error('Clear accounts error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ============================================================
 //  STATIC FILES (for local development)
 // ============================================================
 if (process.env.NODE_ENV !== 'production') {
