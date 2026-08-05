@@ -119,12 +119,6 @@
                 <input type="text" id="car-model" name="model" placeholder="e.g. Camry" required>
               </div>
               <div class="form-group">
-                <label for="car-year">Year *</label>
-                <select id="car-year" name="year" required>
-                  <option value="">Select year</option>
-                </select>
-              </div>
-              <div class="form-group">
                 <label for="car-category">Category *</label>
                 <select id="car-category" name="category" required>
                   <option value="">Select category</option>
@@ -147,10 +141,6 @@
             <h2>Details</h2>
             <p>Provide the specifications, pricing, and your contact number for your car.</p>
             <div class="form-grid">
-              <div class="form-group">
-                <label for="car-mileage">Mileage *</label>
-                <input type="text" id="car-mileage" name="mileage" placeholder="e.g. 32,000" required>
-              </div>
               <div class="form-group">
                 <label for="car-transmission">Transmission *</label>
                 <select id="car-transmission" name="transmission" required>
@@ -215,23 +205,9 @@
                 <label for="car-address">Address / Location *</label>
                 <input type="text" id="car-address" name="address" placeholder="e.g. 123 Main Street" required>
               </div>
-              <div class="form-group">
+              <div class="form-group full">
                 <label for="car-city">City *</label>
                 <input type="text" id="car-city" name="city" placeholder="e.g. Los Angeles" required>
-              </div>
-              <div class="form-group">
-                <label for="car-state">State *</label>
-                <select id="car-state" name="state" required>
-                  <option value="">Select state</option>
-                  <option value="CA">California</option>
-                  <option value="WA">Washington</option>
-                  <option value="OR">Oregon</option>
-                  <option value="ZW">Zimbabwe</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="car-zip">Zip Code *</label>
-                <input type="text" id="car-zip" name="zip" placeholder="e.g. 90001" required>
               </div>
             </div>
             <div class="form-actions">
@@ -392,14 +368,6 @@
       var panels = document.querySelectorAll('.form-step-panel');
       var stepItems = document.querySelectorAll('.form-step-item');
       var photoFiles = [null, null, null];
-
-      var yearSelect = document.getElementById('car-year');
-      for (var y = 2025; y >= 2015; y--) {
-        var opt = document.createElement('option');
-        opt.value = y;
-        opt.textContent = y;
-        yearSelect.appendChild(opt);
-      }
 
       // Country code dropdown with flags
       var countries = [
@@ -653,9 +621,7 @@
           features.push(cb.value);
         });
 
-        var city = document.getElementById('car-city').value;
-        var state = document.getElementById('car-state').value;
-        var location = city + ', ' + state;
+        var location = document.getElementById('car-city').value;
 
         var countryCode = document.getElementById('car-country-code').value;
         var phoneNumber = document.getElementById('car-phone').value;
@@ -664,11 +630,9 @@
         var carData = {
           make: document.getElementById('car-make').value,
           model: document.getElementById('car-model').value,
-          year: parseInt(document.getElementById('car-year').value),
           type: document.getElementById('car-category').value,
           category: document.getElementById('car-category').value.toLowerCase(),
           dailyPrice: parseFloat(document.getElementById('car-price').value),
-          mileage: document.getElementById('car-mileage').value,
           transmission: document.getElementById('car-transmission').value,
           fuel: document.getElementById('car-fuel').value,
           seats: parseInt(document.getElementById('car-seats').value),

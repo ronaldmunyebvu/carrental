@@ -369,14 +369,15 @@ app.get('/api/cars/:id', async (req, res) => {
 app.post('/api/cars', requireAuth, async (req, res) => {
   try {
     const { make, model, year, category, dailyPrice, mileage, transmission, fuel, seats, location, description, features } = req.body;
-    if (!make || !model || !year || !dailyPrice) {
-      return res.status(400).json({ error: 'Make, model, year, and price are required' });
+    if (!make || !model || !dailyPrice) {
+      return res.status(400).json({ error: 'Make, model, and price are required' });
     }
     const featuresStr = Array.isArray(features) ? features.join(',') : (features || null);
+    const carYear = year ? parseInt(year) : new Date().getFullYear();
     const result = await pool.query(
       `INSERT INTO cars (owner_id, make, model, year, category, price_per_day, seats, fuel_type, transmission, mileage, description, location, features, status, available)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,'ACTIVE',TRUE) RETURNING id`,
-      [req.user.id, make, model, parseInt(year), category || 'sedan', parseFloat(dailyPrice), parseInt(seats) || null, fuel || null, transmission || null, parseInt(mileage) || null, description || null, location || null, featuresStr]
+      [req.user.id, make, model, carYear, category || 'sedan', parseFloat(dailyPrice), parseInt(seats) || null, fuel || null, transmission || null, mileage ? parseInt(mileage) : null, description || null, location || null, featuresStr]
     );
     res.status(201).json({ success: true, car: { id: result.rows[0].id } });
   } catch (err) {

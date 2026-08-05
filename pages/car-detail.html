@@ -216,10 +216,6 @@
               <span id="breakdown-label">$0 x 0 days</span>
               <span id="breakdown-subtotal">$0</span>
             </div>
-            <div class="row">
-              <span>Insurance fee</span>
-              <span id="breakdown-insurance">$0</span>
-            </div>
             <div class="row total">
               <span>Total</span>
               <span id="breakdown-total">$0</span>
@@ -391,7 +387,6 @@
         var result = calculateTotal(car.dailyPrice, pickupInput.value, dropoffInput.value);
         document.getElementById('breakdown-label').textContent = '$' + car.dailyPrice + ' x ' + result.days + ' days';
         document.getElementById('breakdown-subtotal').textContent = '$' + result.subtotal;
-        document.getElementById('breakdown-insurance').textContent = '$' + result.insurance;
         document.getElementById('breakdown-total').textContent = '$' + result.total;
       }
       updatePricing();
