@@ -49,20 +49,4 @@ async function sendPasswordResetEmail(user, code) {
   });
 }
 
-async function sendBookingConfirmationEmail(user, booking, car) {
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'rmmunyebvu@gmail.com',
-    to: user.email,
-    subject: 'DriveShare - Booking Confirmed',
-    html: `
-      <h2>Booking Confirmed!</h2>
-      <p>Hi ${user.firstName}, your booking for <strong>${car.make} ${car.model}</strong> has been confirmed.</p>
-      <p><strong>Pickup:</strong> ${booking.pickupDate}<br>
-      <strong>Return:</strong> ${booking.returnDate}<br>
-      <strong>Total:</strong> $${booking.totalPrice.toFixed(2)}</p>
-    `,
-  });
-}
-
-module.exports = { sendConfirmationEmail, sendPasswordResetEmail, sendBookingConfirmationEmail };
+module.exports = { sendConfirmationEmail, sendPasswordResetEmail };

@@ -101,38 +101,6 @@ async function fetchMyCars() {
   return await res.json();
 }
 
-// ---------- Bookings API ----------
-async function createBooking(bookingData) {
-  const res = await fetch('/api/bookings', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(bookingData)
-  });
-  return await res.json();
-}
-
-async function fetchMyBookings() {
-  const res = await fetch('/api/bookings/mine');
-  if (!res.ok) return [];
-  return await res.json();
-}
-
-async function fetchOwnerBookings() {
-  const res = await fetch('/api/bookings/owner');
-  if (!res.ok) return [];
-  return await res.json();
-}
-
-async function approveBooking(id) {
-  const res = await fetch('/api/bookings/' + id + '/approve', { method: 'PUT' });
-  return await res.json();
-}
-
-async function rejectBooking(id) {
-  const res = await fetch('/api/bookings/' + id + '/reject', { method: 'PUT' });
-  return await res.json();
-}
-
 // ---------- Navigation ----------
 function updateNav() {
   const authNav = document.getElementById('nav-auth');

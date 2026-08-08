@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS cars (
   fuel_type VARCHAR(50),
   transmission VARCHAR(50),
   mileage INTEGER,
+  phone VARCHAR(40),
   description TEXT,
+  requirements TEXT,
   available BOOLEAN NOT NULL DEFAULT TRUE,
   status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
   location VARCHAR(255),
@@ -42,17 +44,6 @@ CREATE TABLE IF NOT EXISTS car_images (
   car_id INTEGER NOT NULL REFERENCES cars(id) ON DELETE CASCADE,
   image_data TEXT NOT NULL,
   display_order INTEGER NOT NULL DEFAULT 0
-);
-
-CREATE TABLE IF NOT EXISTS bookings (
-  id SERIAL PRIMARY KEY,
-  car_id INTEGER NOT NULL REFERENCES cars(id) ON DELETE CASCADE,
-  user_id INTEGER NOT NULL REFERENCES users2(id) ON DELETE CASCADE,
-  pickup_date DATE NOT NULL,
-  return_date DATE NOT NULL,
-  total_price NUMERIC(10,2) NOT NULL,
-  status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS email_confirmation_tokens (
@@ -75,8 +66,6 @@ CREATE INDEX IF NOT EXISTS idx_cars_category ON cars(category);
 CREATE INDEX IF NOT EXISTS idx_cars_status ON cars(status);
 CREATE INDEX IF NOT EXISTS idx_cars_available ON cars(available);
 CREATE INDEX IF NOT EXISTS idx_car_images_car ON car_images(car_id);
-CREATE INDEX IF NOT EXISTS idx_bookings_car ON bookings(car_id);
-CREATE INDEX IF NOT EXISTS idx_bookings_user ON bookings(user_id);
 CREATE INDEX IF NOT EXISTS idx_email_tokens_user ON email_confirmation_tokens(user_id);
 CREATE INDEX IF NOT EXISTS idx_email_tokens_token ON email_confirmation_tokens(token);
 CREATE INDEX IF NOT EXISTS idx_password_tokens_user ON password_reset_tokens(user_id);

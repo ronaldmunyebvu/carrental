@@ -287,7 +287,9 @@ function formatCar(row) {
     transmission: row.transmission || '',
     seats: row.seats,
     mileage: row.mileage,
+    phoneNumber: row.car_phone || null,
     description: row.description || '',
+    requirements: row.requirements || '',
     available: row.available,
     status: row.status,
     location: row.location || '',
@@ -300,14 +302,13 @@ function formatCar(row) {
     trips: parseInt(row.trips) || 0,
     instantBook: row.instant_book || false,
     distance: null,
-    phoneNumber: row.owner_phone || null,
   };
 }
 
 app.get('/api/cars', async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT c.*, u.first_name AS owner_first_name, u.last_name AS owner_last_name, u.phone AS owner_phone,
+      `SELECT c.*, u.first_name AS owner_first_name, u.last_name AS owner_last_name, c.phone AS car_phone,
         COALESCE(
           (SELECT json_agg(ci.image_data ORDER BY ci.display_order) FROM car_images ci WHERE ci.car_id = c.id),
           '[]'::json
@@ -348,7 +349,7 @@ app.get('/api/cars/mine', requireAuth, async (req, res) => {
 app.get('/api/cars/:id', async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT c.*, u.first_name AS owner_first_name, u.last_name AS owner_last_name, u.phone AS owner_phone,
+      `SELECT c.*, u.first_name AS owner_first_name, u.last_name AS owner_last_name, c.phone AS car_phone,
         COALESCE(
           (SELECT json_agg(ci.image_data ORDER BY ci.display_order) FROM car_images ci WHERE ci.car_id = c.id),
           '[]'::json
@@ -368,16 +369,19 @@ app.get('/api/cars/:id', async (req, res) => {
 
 app.post('/api/cars', requireAuth, async (req, res) => {
   try {
-    const { make, model, year, category, dailyPrice, mileage, transmission, fuel, seats, location, description, features } = req.body;
+    const { make, model, year, category, dailyPrice, mileage, transmission, fuel, seats, location, description, features, phoneNumber, requirements } = req.body;
     if (!make || !model || !dailyPrice) {
       return res.status(400).json({ error: 'Make, model, and price are required' });
+    }
+    if (!requirements || !requirements.trim()) {
+      return res.status(400).json({ error: 'Rental requirements are required' });
     }
     const featuresStr = Array.isArray(features) ? features.join(',') : (features || null);
     const carYear = year ? parseInt(year) : new Date().getFullYear();
     const result = await pool.query(
-      `INSERT INTO cars (owner_id, make, model, year, category, price_per_day, seats, fuel_type, transmission, mileage, description, location, features, status, available)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,'ACTIVE',TRUE) RETURNING id`,
-      [req.user.id, make, model, carYear, category || 'sedan', parseFloat(dailyPrice), parseInt(seats) || null, fuel || null, transmission || null, mileage ? parseInt(mileage) : null, description || null, location || null, featuresStr]
+      `INSERT INTO cars (owner_id, make, model, year, category, price_per_day, seats, fuel_type, transmission, mileage, phone, description, requirements, location, features, status, available)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'ACTIVE',TRUE) RETURNING id`,
+      [req.user.id, make, model, carYear, category || 'sedan', parseFloat(dailyPrice), parseInt(seats) || null, fuel || null, transmission || null, mileage ? parseInt(mileage) : null, phoneNumber || null, description || null, requirements.trim(), location || null, featuresStr]
     );
     res.status(201).json({ success: true, car: { id: result.rows[0].id } });
   } catch (err) {
@@ -392,12 +396,12 @@ app.put('/api/cars/:id', requireAuth, async (req, res) => {
     if (existing.rows.length === 0) return res.status(404).json({ error: 'Car not found' });
     if (existing.rows[0].owner_id !== req.user.id) return res.status(403).json({ error: 'Not authorized' });
 
-    const { make, model, year, category, dailyPrice, mileage, transmission, fuel, seats, location, description, features, available } = req.body;
+    const { make, model, year, category, dailyPrice, mileage, transmission, fuel, seats, location, description, features, phoneNumber, requirements, available } = req.body;
     const featuresStr = Array.isArray(features) ? features.join(',') : (features || null);
     await pool.query(
       `UPDATE cars SET make=$1, model=$2, year=$3, category=$4, price_per_day=$5, seats=$6,
-       fuel_type=$7, transmission=$8, mileage=$9, description=$10, location=$11, features=$12, available=$13 WHERE id=$14`,
-      [make, model, parseInt(year), category, parseFloat(dailyPrice), parseInt(seats) || null, fuel || null, transmission || null, parseInt(mileage) || null, description || null, location || null, featuresStr, available !== false, req.params.id]
+       fuel_type=$7, transmission=$8, mileage=$9, phone=$10, description=$11, requirements=$12, location=$13, features=$14, available=$15 WHERE id=$16`,
+      [make, model, parseInt(year), category, parseFloat(dailyPrice), parseInt(seats) || null, fuel || null, transmission || null, parseInt(mileage) || null, phoneNumber || null, description || null, requirements || null, location || null, featuresStr, available !== false, req.params.id]
     );
     res.json({ success: true });
   } catch (err) {
@@ -468,121 +472,6 @@ app.delete('/api/images/:id', requireAuth, async (req, res) => {
 });
 
 // ============================================================
-//  BOOKING ROUTES
-// ============================================================
-
-app.post('/api/bookings', requireAuth, async (req, res) => {
-  try {
-    const { carId, startDate, endDate, total } = req.body;
-    if (!carId || !startDate || !endDate || !total) {
-      return res.status(400).json({ error: 'carId, startDate, endDate, and total are required' });
-    }
-    const carResult = await pool.query('SELECT id, owner_id FROM cars WHERE id = $1 AND available = TRUE', [carId]);
-    if (carResult.rows.length === 0) return res.status(404).json({ error: 'Car not available' });
-    if (carResult.rows[0].owner_id === req.user.id) return res.status(400).json({ error: 'Cannot book your own car' });
-
-    const result = await pool.query(
-      `INSERT INTO bookings (car_id, user_id, pickup_date, return_date, total_price, status)
-       VALUES ($1,$2,$3,$4,$5,'PENDING') RETURNING id`,
-      [carId, req.user.id, startDate, endDate, parseFloat(total)]
-    );
-    res.status(201).json({ success: true, booking: { id: result.rows[0].id } });
-  } catch (err) {
-    console.error('Create booking error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.get('/api/bookings/mine', requireAuth, async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT b.*, c.make, c.model, c.year, c.location, c.phone AS car_phone,
-        u.first_name AS owner_first_name, u.last_name AS owner_last_name, u.phone AS owner_phone,
-        renter.first_name AS renter_first_name, renter.last_name AS renter_last_name
-       FROM bookings b
-       JOIN cars c ON b.car_id = c.id
-       JOIN users2 u ON c.owner_id = u.id
-       JOIN users2 renter ON b.user_id = renter.id
-       WHERE b.user_id = $1
-       ORDER BY b.created_at DESC`,
-      [req.user.id]
-    );
-    res.json(result.rows.map(row => ({
-      id: row.id,
-      carId: row.car_id,
-      renterId: row.user_id,
-      status: row.status.toLowerCase(),
-      startDate: row.pickup_date,
-      endDate: row.return_date,
-      total: parseFloat(row.total_price),
-      carTitle: row.year + ' ' + row.make + ' ' + row.model,
-      phoneNumber: row.owner_phone || null,
-    })));
-  } catch (err) {
-    console.error('My bookings error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.get('/api/bookings/owner', requireAuth, async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT b.*, c.make, c.model, c.year,
-        renter.id AS renter_user_id, renter.first_name AS renter_first_name, renter.last_name AS renter_last_name
-       FROM bookings b
-       JOIN cars c ON b.car_id = c.id
-       JOIN users2 renter ON b.user_id = renter.id
-       WHERE c.owner_id = $1
-       ORDER BY b.created_at DESC`,
-      [req.user.id]
-    );
-    res.json(result.rows.map(row => ({
-      id: row.id,
-      carId: row.car_id,
-      renterId: row.renter_user_id,
-      status: row.status.toLowerCase(),
-      startDate: row.pickup_date,
-      endDate: row.return_date,
-      total: parseFloat(row.total_price),
-      carTitle: row.year + ' ' + row.make + ' ' + row.model,
-    })));
-  } catch (err) {
-    console.error('Owner bookings error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.put('/api/bookings/:id/approve', requireAuth, async (req, res) => {
-  try {
-    const result = await pool.query(
-      `UPDATE bookings SET status = 'CONFIRMED' WHERE id = $1
-       AND car_id IN (SELECT id FROM cars WHERE owner_id = $2) RETURNING *`,
-      [req.params.id, req.user.id]
-    );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
-    res.json({ success: true });
-  } catch (err) {
-    console.error('Approve booking error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.put('/api/bookings/:id/reject', requireAuth, async (req, res) => {
-  try {
-    const result = await pool.query(
-      `UPDATE bookings SET status = 'REJECTED' WHERE id = $1
-       AND car_id IN (SELECT id FROM cars WHERE owner_id = $2) RETURNING *`,
-      [req.params.id, req.user.id]
-    );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
-    res.json({ success: true });
-  } catch (err) {
-    console.error('Reject booking error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// ============================================================
 //  ADMIN ROUTES
 // ============================================================
 
@@ -592,9 +481,9 @@ app.delete('/api/admin/clear-accounts', async (req, res) => {
     if (!adminKey || adminKey !== (process.env.ADMIN_KEY || 'dev-admin-key-change-me')) {
       return res.status(403).json({ error: 'Forbidden' });
     }
+    try { await pool.query('DELETE FROM bookings'); } catch (e) {}
     await pool.query('DELETE FROM password_reset_tokens');
     await pool.query('DELETE FROM email_confirmation_tokens');
-    await pool.query('DELETE FROM bookings');
     await pool.query('DELETE FROM car_images');
     await pool.query('DELETE FROM cars');
     await pool.query('DELETE FROM users2');

@@ -187,7 +187,7 @@
                   </div>
                   <input type="tel" id="car-phone" name="phoneNumber" placeholder="e.g. 77 123 4567" required style="flex:1;">
                 </div>
-                <p style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;">Include your country code. This number will only be shared with renters after their booking is approved.</p>
+                <p style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;">Include your country code. This number will be shown publicly on your listing so renters can contact you directly.</p>
               </div>
             </div>
             <div class="form-actions">
@@ -268,6 +268,11 @@
               <div class="form-group full">
                 <label for="car-description">Description *</label>
                 <textarea id="car-description" name="description" placeholder="Describe your car, its condition, any special features, house rules, etc." required></textarea>
+              </div>
+              <div class="form-group full">
+                <label for="car-requirements">Rental Requirements *</label>
+                <textarea id="car-requirements" name="requirements" placeholder="What do you expect from renters? e.g. Valid driver's license, age 25+, no smoking, no pets, return with full fuel tank, deposit required, etc." required></textarea>
+                <p style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;">These requirements will be shown to renters so they know what you expect before contacting you.</p>
               </div>
               <div class="form-group full">
                 <label>Features</label>
@@ -638,6 +643,7 @@
           seats: parseInt(document.getElementById('car-seats').value),
           location: location,
           description: document.getElementById('car-description').value,
+          requirements: document.getElementById('car-requirements').value,
           features: features,
           phoneNumber: fullPhone
         };
