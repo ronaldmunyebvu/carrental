@@ -8,8 +8,10 @@ const path = require('path');
 const pool = require('./lib/db');
 const { signToken, verifyToken } = require('./lib/auth');
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('./lib/mail');
+const runMigrations = require('./lib/migrate');
 
 const app = express();
+runMigrations();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());

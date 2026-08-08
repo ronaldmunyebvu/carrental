@@ -63,6 +63,7 @@ async function fetchCars(params) {
   }
   const url = '/api/cars' + (query.toString() ? '?' + query.toString() : '');
   const res = await fetch(url);
+  if (!res.ok) return [];
   return await res.json();
 }
 
